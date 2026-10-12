@@ -1,0 +1,15 @@
+# Personal learning context
+/devpost/learner-profile.md
+
+# Credentials & environment files
+.env
+.env.*
+!.env.example
+
+# Dependencies & build outputs
+node_modules/
+.next/
+dist/
+out/
+*.tsbuildinfo
+
