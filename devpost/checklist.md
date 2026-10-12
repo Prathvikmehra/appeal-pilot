@@ -9,7 +9,7 @@ Build mode: learn
 
 ## Slices
 
-- [ ] **1. Project setup, types, and Zod schemas**
+- [x] **1. Project setup, types, and Zod schemas**
   Becomes usable: A clean Next.js project with TypeScript, Tailwind CSS, Lucide React, `@google/genai`, `pdf-lib`, `zod`, and `vitest` installed and configured, with core domain types (`types/appeal.ts`), Zod validation schemas (`lib/schemas.ts`), and `.env.example`.
   Why now: Proves project setup and scaffolding first, establishing strict shared type and schema contracts that every later slice builds upon without ambiguity.
   PRD ref: `prd.md > Screens and Layout`, `prd.md > Look and Feel`
