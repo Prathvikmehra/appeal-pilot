@@ -43,7 +43,7 @@ export const SampleSelector: React.FC<SampleSelectorProps> = ({ onSelectSample, 
                 </span>
               </div>
               <div className="absolute bottom-2 left-3 right-3 text-white">
-                <p className="text-xs font-medium opacity-90 truncate">{sample.facts.insurer}</p>
+                <p className="text-xs font-medium opacity-90 break-words leading-tight">{sample.facts.insurer}</p>
               </div>
             </div>
 

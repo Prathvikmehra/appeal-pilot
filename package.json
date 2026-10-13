@@ -7,6 +7,7 @@
     "build": "next build",
     "start": "next start",
     "test": "vitest run",
+    "test:live": "vitest run tests/live-pipeline.test.ts",
     "test:watch": "vitest"
   },
   "dependencies": {

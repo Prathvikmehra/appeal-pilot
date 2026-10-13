@@ -164,7 +164,7 @@ export const ExplanationCard: React.FC<ExplanationCardProps> = ({
               type="text"
               value={facts.insurer}
               onChange={(e) => onUpdateFact('insurer', e.target.value)}
-              className="w-full text-xs font-semibold text-slate-900 bg-transparent focus:outline-none truncate min-w-0"
+              className="w-full text-xs font-semibold text-slate-900 bg-transparent focus:outline-none min-w-0"
             />
           </div>
 
@@ -177,7 +177,7 @@ export const ExplanationCard: React.FC<ExplanationCardProps> = ({
               type="text"
               value={facts.claimNumber}
               onChange={(e) => onUpdateFact('claimNumber', e.target.value)}
-              className="w-full text-xs font-mono font-semibold text-slate-900 bg-transparent focus:outline-none truncate min-w-0"
+              className="w-full text-xs font-mono font-semibold text-slate-900 bg-transparent focus:outline-none min-w-0"
             />
           </div>
 

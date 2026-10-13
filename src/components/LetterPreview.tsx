@@ -11,9 +11,9 @@ export const LetterPreview: React.FC<LetterPreviewProps> = ({ previewUrl, title,
   return (
     <div className="w-full bg-white border border-slate-200 rounded-xl overflow-hidden shadow-xs flex flex-col h-full max-h-[85vh] sticky top-20">
       <div className="px-4 py-3 bg-slate-50 border-b border-slate-200 flex items-center justify-between gap-2 min-w-0">
-        <div className="flex items-center space-x-2 truncate min-w-0">
+        <div className="flex items-center space-x-2 min-w-0 flex-1">
           <FileText className="w-4 h-4 text-teal-600 flex-shrink-0" />
-          <span className="text-xs font-semibold text-slate-700 truncate min-w-0">{title}</span>
+          <span className="text-xs font-semibold text-slate-700 break-words leading-tight">{title}</span>
         </div>
         <a
           href={previewUrl}

@@ -91,18 +91,20 @@ Appeal Pilot never presents a guessed deadline as certain:
 ## Important Disclosures & Privacy
 
 ### Privacy & Data Handling
-> **We don't store your uploads.** Letters are sent to an AI service for analysis, so please don't upload real personal or medical information in this demo. Appeal Pilot provides guidance and templates, not legal or medical advice.
+> **We don't store your uploads.** Letters are sent to an AI service (Google Gemini) for document analysis, so please don't upload real personal or medical information in this demo. Appeal Pilot provides guidance and templates, not legal or medical advice.
 
 - **Zero Persistence**: All application state resides exclusively in memory in the client browser session. Clicking **Start over** or refreshing immediately clears all data.
 - **Single-Page Safety**: Uploads are restricted to 3 MB and validated on the server. Multi-page PDFs are rejected by `pdf-lib` to protect serverless quotas.
+- **In-Memory Rate Limiting**: The per-IP sliding window limiter (10 requests/min) is implemented in-memory. On distributed serverless hosting (such as Vercel Edge/Serverless functions), each isolated instance tracks its own memory, providing best-effort rate limiting rather than a shared global Redis lock.
 
 ### Sourced Research Context
 The explanation card includes a verified, static benchmark statistic:
 > *"In Medicare Advantage, only about 11.5% of denials were appealed in 2024, yet about 80% of those appeals were overturned ([KFF, 2024](https://www.kff.org/medicare/issue-brief/overturned-denials-in-medicare-advantage/)). Appeals are often worth trying, though this figure covers Medicare Advantage and offers no guarantee for your specific case."*
 
-### Demo Recording Mode & Fallback Architecture
-- **`DEMO_MODE=cached`**: When set in `.env.local`, the server routes immediately return the deterministic golden sample data for the three sample cases. This guarantees 100% reproducible demo video recordings without API latency or rate limit surprises.
-- **Live Mode with Fallback**: When `DEMO_MODE` is disabled, the sample cases run through the live Gemini API. If the API key is unconfigured, rate-limited, or fails validation, the system automatically falls back to golden sample data to prevent a broken demo.
+### AI Model & Fallback Architecture
+- **AI Model**: Built with **Google Gemini Flash** (`gemini-3.1-flash-lite`), configurable via the `GEMINI_MODEL` environment variable.
+- **Deterministic Cached Fallback**: All three built-in sample cases have a complete set of pre-computed golden fallback data. If an API key is omitted, hits a quota rate limit, or fails validation, Appeal Pilot automatically falls back to the cached golden results, ensuring the app remains fully functional and resilient.
+- **Demo Recording Switch (`DEMO_MODE=cached`)**: When set in `.env.local`, the server routes immediately return deterministic golden results for the sample letters, guaranteeing identical, zero-latency execution for video recordings.
 
 ---
 
@@ -110,11 +112,11 @@ The explanation card includes a verified, static benchmark statistic:
 
 - **Framework**: Next.js 14 (App Router, TypeScript)
 - **Styling**: Tailwind CSS
-- **AI SDK**: `@google/genai` (Official Google GenAI SDK, Gemini Flash)
+- **AI Model & SDK**: Google Gemini Flash (`gemini-3.1-flash-lite`) via `@google/genai` (Official Google GenAI SDK)
 - **Validation**: Zod (Runtime JSON schema validation)
 - **Document Processing**: `pdf-lib` (Single-page PDF inspection & fixtures)
 - **Icons**: Lucide React
-- **Testing**: Vitest (29 unit & route integration tests)
+- **Testing**: Vitest (Unit, deterministic route, and live pipeline tests)
 
 ---
 
@@ -149,13 +151,18 @@ DEMO_MODE=cached
 
 ### 4. Run Test Suite
 ```bash
+# Run unit & deterministic route integration tests (fast, no API key required)
 npm test
+
+# Run live Gemini multimodal extraction & generation test against real API (requires GEMINI_API_KEY)
+npm run test:live
 ```
-All 29 unit and route integration tests should pass:
+All unit and route integration tests pass out of the box:
 - `tests/date-calculator.test.ts` (14 tests)
 - `tests/ics-generator.test.ts` (5 tests)
 - `tests/server-validation.test.ts` (5 tests)
 - `tests/routes.test.ts` (5 tests)
+- `tests/live-pipeline.test.ts` (2 tests, auto-skipped when no API key is present)
 
 ### 5. Start the Development Server
 ```bash

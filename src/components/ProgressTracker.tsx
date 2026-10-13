@@ -22,7 +22,7 @@ export const ProgressTracker: React.FC<ProgressTrackerProps> = ({ currentStep, i
           <div className="h-5 w-5 rounded-full bg-teal-600 text-white flex items-center justify-center flex-shrink-0">
             <Check className="w-3 h-3 stroke-[3]" />
           </div>
-          <span className="font-semibold truncate">Analysis complete — Action Kit ready</span>
+          <span className="font-semibold break-words">Analysis complete — Action Kit ready</span>
         </div>
         <span className="text-teal-700 font-medium text-[11px] flex items-center whitespace-nowrap flex-shrink-0 self-start sm:self-auto">
           <Sparkles className="w-3 h-3 mr-1" />
