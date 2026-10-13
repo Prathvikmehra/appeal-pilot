@@ -17,14 +17,14 @@ const STEPS = [
 export const ProgressTracker: React.FC<ProgressTrackerProps> = ({ currentStep, isComplete, collapsed }) => {
   if (isComplete && collapsed) {
     return (
-      <div className="w-full bg-teal-50 border border-teal-200/80 rounded-xl px-4 py-2.5 flex items-center justify-between text-xs text-teal-800 shadow-xs mb-4 animate-fadeIn">
-        <div className="flex items-center space-x-2">
-          <div className="h-5 w-5 rounded-full bg-teal-600 text-white flex items-center justify-center">
+      <div className="w-full bg-teal-50 border border-teal-200/80 rounded-xl px-4 py-2.5 flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 sm:gap-2 text-xs text-teal-800 shadow-xs mb-4 animate-fadeIn min-w-0">
+        <div className="flex items-center space-x-2 min-w-0">
+          <div className="h-5 w-5 rounded-full bg-teal-600 text-white flex items-center justify-center flex-shrink-0">
             <Check className="w-3 h-3 stroke-[3]" />
           </div>
-          <span className="font-semibold">Analysis complete — Action Kit ready</span>
+          <span className="font-semibold truncate">Analysis complete — Action Kit ready</span>
         </div>
-        <span className="text-teal-600 font-medium text-[11px] flex items-center">
+        <span className="text-teal-700 font-medium text-[11px] flex items-center whitespace-nowrap flex-shrink-0 self-start sm:self-auto">
           <Sparkles className="w-3 h-3 mr-1" />
           4 stages verified
         </span>
@@ -33,13 +33,13 @@ export const ProgressTracker: React.FC<ProgressTrackerProps> = ({ currentStep, i
   }
 
   return (
-    <div className="w-full bg-white border border-slate-200 rounded-xl p-5 shadow-xs mb-6">
-      <div className="flex items-center justify-between mb-3 border-b border-slate-100 pb-2">
-        <h3 className="text-xs font-semibold text-slate-500 uppercase tracking-wider flex items-center">
-          <Sparkles className="w-3.5 h-3.5 mr-1.5 text-teal-600" />
+    <div className="w-full bg-white border border-slate-200 rounded-xl p-4 sm:p-5 shadow-xs mb-6 min-w-0">
+      <div className="flex items-center justify-between mb-3 border-b border-slate-100 pb-2 gap-2 min-w-0">
+        <h3 className="text-xs font-semibold text-slate-500 uppercase tracking-wider flex items-center whitespace-nowrap">
+          <Sparkles className="w-3.5 h-3.5 mr-1.5 text-teal-600 flex-shrink-0" />
           Analyzing Document
         </h3>
-        <span className="text-xs font-medium text-teal-700">
+        <span className="text-xs font-medium text-teal-700 whitespace-nowrap flex-shrink-0">
           {isComplete ? 'Complete' : `Step ${Math.min(currentStep, 4)} of 4`}
         </span>
       </div>
@@ -77,7 +77,7 @@ export const ProgressTracker: React.FC<ProgressTrackerProps> = ({ currentStep, i
                   <span>{step.id}</span>
                 )}
               </div>
-              <span className="text-xs sm:text-sm">{step.label}</span>
+              <span className="text-xs sm:text-sm text-pretty min-w-0">{step.label}</span>
             </div>
           );
         })}

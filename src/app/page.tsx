@@ -188,20 +188,20 @@ export default function Home() {
     <div className="min-h-screen flex flex-col bg-slate-50 text-slate-900 font-sans">
       <Header onStartOver={handleStartOver} showStartOver={isAnalyzing} />
 
-      <main className="flex-1 max-w-6xl w-full mx-auto px-4 py-8 sm:py-12">
+      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
         {errorMessage && (
           <div
             className="max-w-2xl mx-auto mb-8 p-4 rounded-xl bg-red-50 border border-red-200 text-red-900 flex items-start space-x-3 shadow-xs animate-fadeIn"
             role="alert"
           >
             <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
-            <div className="flex-1 text-sm">
+            <div className="flex-1 text-sm min-w-0">
               <h3 className="font-semibold text-red-950">We couldn&apos;t process this letter</h3>
-              <p className="mt-1 text-red-800">{errorMessage}</p>
+              <p className="mt-1 text-red-800 text-pretty">{errorMessage}</p>
               <div className="mt-3 flex space-x-3">
                 <button
                   onClick={handleStartOver}
-                  className="px-3.5 py-1.5 text-xs font-semibold rounded-lg bg-red-100 hover:bg-red-200 text-red-950 transition-colors"
+                  className="px-3.5 py-1.5 text-xs font-semibold rounded-lg bg-red-100 hover:bg-red-200 text-red-950 transition-colors whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-600"
                 >
                   Try another document
                 </button>
@@ -212,14 +212,14 @@ export default function Home() {
 
         {!isAnalyzing ? (
           /* Landing View */
-          <div className="max-w-4xl mx-auto space-y-10 animate-fadeIn">
+          <div className="max-w-5xl mx-auto space-y-10 animate-fadeIn">
             {/* Hero Section */}
             <div className="text-center space-y-3 pt-2">
-              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-slate-950">
+              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-slate-950 text-balance max-w-3xl mx-auto">
                 Got a confusing health insurance denial?{' '}
                 <span className="text-teal-700 block sm:inline">Let&apos;s turn it into a plan.</span>
               </h1>
-              <p className="max-w-2xl mx-auto text-base sm:text-lg text-slate-600 leading-relaxed">
+              <p className="max-w-2xl mx-auto text-base sm:text-lg text-slate-600 leading-relaxed text-pretty">
                 Pick a sample letter or upload your own. You&apos;ll get a plain-English explanation, an appeal letter, a phone script, and a calendar reminder for your deadline.
               </p>
             </div>
@@ -246,7 +246,7 @@ export default function Home() {
             <div className="max-w-3xl mx-auto pt-6 text-center">
               <div className="inline-flex items-center text-xs text-slate-500 bg-white/70 border border-slate-200/80 rounded-lg px-4 py-3 shadow-2xs space-x-2 text-left">
                 <ShieldAlert className="w-4 h-4 text-slate-400 flex-shrink-0 mt-0.5" />
-                <p>
+                <p className="text-pretty">
                   We don&apos;t store your uploads. Letters are sent to an AI service for analysis, so please don&apos;t upload real personal or medical information in this demo. Appeal Pilot provides guidance and templates, not legal or medical advice.
                 </p>
               </div>
@@ -256,7 +256,7 @@ export default function Home() {
           /* Analysis & Results View (Slice 3b complete flow) */
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start animate-fadeIn">
             {/* Left Column: Sticky Letter Preview */}
-            <div className="lg:col-span-5 order-2 lg:order-1">
+            <div className="lg:col-span-5 min-w-0 order-2 lg:order-1">
               {previewUrl && (
                 <LetterPreview
                   previewUrl={previewUrl}
@@ -267,7 +267,7 @@ export default function Home() {
             </div>
 
             {/* Right Column: Progress Tracker, Explanation Card, Action Kit */}
-            <div className="lg:col-span-7 order-1 lg:order-2 space-y-6">
+            <div className="lg:col-span-7 min-w-0 order-1 lg:order-2 space-y-6">
               <ProgressTracker
                 currentStep={currentStep}
                 isComplete={isComplete}

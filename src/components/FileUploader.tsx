@@ -81,19 +81,19 @@ export const FileUploader: React.FC<FileUploaderProps> = ({ onFileUpload, disabl
           <div className="h-10 w-10 rounded-full bg-slate-100 flex items-center justify-center text-slate-500 mb-1">
             <UploadCloud className="w-5 h-5" />
           </div>
-          <p className="text-sm font-semibold text-slate-700">
+          <p className="text-sm font-semibold text-slate-700 text-balance">
             Upload a single-page letter <span className="font-normal text-slate-500">(PNG, JPG, or PDF)</span>
           </p>
-          <p className="text-xs text-slate-400">
+          <p className="text-xs text-slate-400 text-pretty">
             Drag & drop or click to browse • Max 3 MB • Ephemeral (no uploads stored)
           </p>
         </div>
       </div>
 
       {errorMessage && (
-        <div className="mt-3 flex items-start space-x-2 text-xs text-rose-600 bg-rose-50 border border-rose-200 rounded-lg p-3 animate-fadeIn">
+        <div className="mt-3 flex items-start space-x-2 text-xs text-rose-600 bg-rose-50 border border-rose-200 rounded-lg p-3 animate-fadeIn min-w-0">
           <AlertCircle className="w-4 h-4 flex-shrink-0 mt-0.5" />
-          <span>{errorMessage}</span>
+          <span className="min-w-0 break-words">{errorMessage}</span>
         </div>
       )}
     </div>

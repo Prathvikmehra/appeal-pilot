@@ -162,7 +162,7 @@ export async function extractDocumentFacts(
   mimeType: string
 ): Promise<ExtractedFactsValidated> {
   const ai = getGenAI();
-  const model = process.env.GEMINI_MODEL || 'gemini-2.5-flash';
+  const model = process.env.GEMINI_MODEL || 'gemini-3.1-flash-lite';
 
   const systemInstruction =
     'You are an objective document extraction assistant specialized in health insurance denial letters. ' +
@@ -236,7 +236,7 @@ export async function generateActionKit(
   }
 ): Promise<GeneratedKitValidated> {
   const ai = getGenAI();
-  const model = process.env.GEMINI_MODEL || 'gemini-2.5-flash';
+  const model = process.env.GEMINI_MODEL || 'gemini-3.1-flash-lite';
 
   const systemInstruction =
     'You are an empathetic, expert patient advocate helping an insured patient appeal an unfair health insurance denial. ' +

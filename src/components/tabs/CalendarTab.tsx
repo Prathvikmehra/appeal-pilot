@@ -45,8 +45,8 @@ export const CalendarTab: React.FC<CalendarTabProps> = ({
 
   return (
     <div className="space-y-6">
-      <div className="bg-slate-50 border border-slate-200/80 rounded-xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-        <p className="text-xs text-slate-600">
+      <div className="bg-slate-50 border border-slate-200/80 rounded-xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 min-w-0">
+        <p className="text-xs text-slate-600 text-pretty max-w-xl">
           <span className="font-semibold text-slate-800">Never miss a deadline: </span>
           Download an `.ics` file that works natively with Google Calendar, Apple Calendar, and Outlook.
         </p>
@@ -54,7 +54,7 @@ export const CalendarTab: React.FC<CalendarTabProps> = ({
         {deadline.targetDate && (
           <button
             onClick={handleDownload}
-            className="inline-flex items-center text-xs font-semibold px-4 py-2 rounded-lg bg-teal-600 hover:bg-teal-700 text-white shadow-2xs transition-colors self-end sm:self-auto flex-shrink-0"
+            className="inline-flex items-center text-xs font-semibold px-4 py-2 rounded-lg bg-teal-600 hover:bg-teal-700 text-white shadow-2xs transition-colors self-start sm:self-auto flex-shrink-0 whitespace-nowrap focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2"
           >
             {downloaded ? (
               <>
@@ -84,18 +84,18 @@ export const CalendarTab: React.FC<CalendarTabProps> = ({
             </p>
           </div>
 
-          <form onSubmit={handleManualSubmit} className="flex flex-col sm:flex-row items-center justify-center gap-2 max-w-sm mx-auto">
+          <form onSubmit={handleManualSubmit} className="flex flex-col sm:flex-row items-center justify-center gap-2 max-w-sm mx-auto w-full">
             <input
               type="date"
               value={manualInput}
               onChange={(e) => setManualInput(e.target.value)}
               required
-              className="px-3.5 py-2 bg-white border border-slate-300 rounded-lg text-xs text-slate-900 focus:outline-none focus:ring-2 focus:ring-teal-500"
+              className="w-full sm:w-auto px-3.5 py-2 bg-white border border-slate-300 rounded-lg text-xs text-slate-900 focus:outline-none focus:ring-2 focus:ring-teal-500 whitespace-nowrap"
             />
             <button
               type="submit"
               disabled={!manualInput}
-              className="px-4 py-2 bg-teal-600 hover:bg-teal-700 text-white rounded-lg text-xs font-semibold shadow-xs disabled:opacity-50"
+              className="w-full sm:w-auto px-4 py-2 bg-teal-600 hover:bg-teal-700 text-white rounded-lg text-xs font-semibold shadow-xs disabled:opacity-50 whitespace-nowrap focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2"
             >
               Set Date
             </button>
@@ -103,23 +103,23 @@ export const CalendarTab: React.FC<CalendarTabProps> = ({
         </div>
       ) : (
         /* Active Deadline Event Card */
-        <div className="bg-white border border-slate-200 rounded-xl p-6 shadow-2xs space-y-5">
-          <div className="flex items-start justify-between border-b border-slate-100 pb-4">
-            <div>
-              <span className="text-[11px] font-bold tracking-wider uppercase text-teal-700 bg-teal-50 px-2.5 py-0.5 rounded-full border border-teal-200 inline-block mb-1.5">
+        <div className="bg-white border border-slate-200 rounded-xl p-5 sm:p-6 shadow-2xs space-y-5 min-w-0">
+          <div className="flex flex-col sm:flex-row sm:items-start justify-between border-b border-slate-100 pb-4 gap-3 sm:gap-4 min-w-0">
+            <div className="min-w-0 flex-1">
+              <span className="text-[11px] font-bold tracking-wider uppercase text-teal-700 bg-teal-50 px-2.5 py-0.5 rounded-full border border-teal-200 inline-block mb-1.5 whitespace-nowrap">
                 {deadline.isEstimated ? 'Estimated All-Day Event' : 'All-Day Calendar Event'}
               </span>
-              <h3 className="text-base font-bold text-slate-900">{kit.calendarEvent.title}</h3>
+              <h3 className="text-base font-bold text-slate-900 break-words text-balance">{kit.calendarEvent.title}</h3>
             </div>
-            <div className="text-right">
-              <span className="text-xs font-mono font-semibold text-slate-500">Event Date</span>
-              <p className="text-sm font-bold text-slate-900">{formatDisplayDate(deadline.targetDate)}</p>
+            <div className="text-left sm:text-right flex-shrink-0">
+              <span className="text-xs font-mono font-semibold text-slate-500 whitespace-nowrap">Event Date</span>
+              <p className="text-sm font-bold text-slate-900 whitespace-nowrap">{formatDisplayDate(deadline.targetDate)}</p>
             </div>
           </div>
 
-          <div className="space-y-2 text-xs sm:text-sm text-slate-700">
+          <div className="space-y-2 text-xs sm:text-sm text-slate-700 min-w-0">
             <span className="font-semibold text-slate-900">Event Description:</span>
-            <p className="bg-slate-50 p-3 rounded-lg border border-slate-200/70 text-slate-600">
+            <p className="bg-slate-50 p-3.5 rounded-lg border border-slate-200/70 text-slate-600 text-pretty break-words leading-relaxed">
               {deadline.isEstimated && (
                 <span className="block font-semibold text-amber-800 mb-1">
                   ⚠️ Estimated deadline, confirm with your insurer.
@@ -131,16 +131,16 @@ export const CalendarTab: React.FC<CalendarTabProps> = ({
 
           <div className="pt-2 border-t border-slate-100">
             <h4 className="text-xs font-bold text-slate-600 uppercase tracking-wider mb-2 flex items-center">
-              <Bell className="w-3.5 h-3.5 mr-1 text-teal-600" />
+              <Bell className="w-3.5 h-3.5 mr-1 text-teal-600 flex-shrink-0" />
               Automated Alarms Included in File
             </h4>
             <div className="flex flex-wrap gap-2">
               {deadline.alarmDaysPrior.map((days, idx) => (
                 <span
                   key={idx}
-                  className="inline-flex items-center text-xs font-medium bg-slate-100 text-slate-700 px-2.5 py-1 rounded-md border border-slate-200"
+                  className="inline-flex items-center text-xs font-medium bg-slate-100 text-slate-700 px-2.5 py-1 rounded-md border border-slate-200 whitespace-nowrap"
                 >
-                  <Calendar className="w-3 h-3 mr-1 text-slate-400" />
+                  <Calendar className="w-3 h-3 mr-1 text-slate-400 flex-shrink-0" />
                   {days} days before ({days}d reminder alarm)
                 </span>
               ))}

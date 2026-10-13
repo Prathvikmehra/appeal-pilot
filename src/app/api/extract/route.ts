@@ -37,10 +37,12 @@ export async function POST(req: NextRequest) {
       const sample = SAMPLE_CASES[sampleId];
 
       if (isDemoCached) {
+        console.log(`[API /extract] Mode: cached (Sample: ${sampleId})`);
         return NextResponse.json(sample.facts);
       }
 
       // If live mode, run through live Gemini API with fallback to golden sample data
+      console.log(`[API /extract] Mode: live (Sample: ${sampleId}) - Calling Gemini Flash API`);
       try {
         const sampleFileName = path.basename(sample.imagePath);
         const sampleFilePath = path.join(process.cwd(), 'public', 'samples', sampleFileName);
@@ -48,6 +50,7 @@ export async function POST(req: NextRequest) {
         const base64Data = fileBuffer.toString('base64');
 
         const facts = await extractDocumentFacts(base64Data, 'image/png');
+        console.log(`[API /extract] Mode: live (Sample: ${sampleId}) - Extraction SUCCESS`);
         return NextResponse.json(facts);
       } catch (geminiError) {
         console.warn(`[API /extract] Live extraction failed for sample ${sampleId}, falling back to golden data:`, geminiError);
@@ -97,8 +100,10 @@ export async function POST(req: NextRequest) {
     }
 
     // 5. Invoke Gemini Multimodal Extraction
+    console.log(`[API /extract] Mode: live (Custom upload: ${file.name}, ${file.type}) - Calling Gemini Flash API`);
     const base64Data = buffer.toString('base64');
     const facts: ExtractedFactsValidated = await extractDocumentFacts(base64Data, file.type);
+    console.log(`[API /extract] Mode: live (Custom upload) - Extraction SUCCESS for ${facts.insurer}`);
 
     return NextResponse.json(facts);
   } catch (error) {

@@ -30,13 +30,16 @@ export async function POST(req: NextRequest) {
       const sample = SAMPLE_CASES[sampleId];
 
       if (isDemoCached) {
+        console.log(`[API /generate] Mode: cached (Sample: ${sampleId})`);
         return NextResponse.json(sample.kit);
       }
 
       // Live mode with fallback to cached golden data on failure
+      console.log(`[API /generate] Mode: live (Sample: ${sampleId}) - Calling Gemini Flash API`);
       try {
         const validatedFacts = ExtractedFactsSchema.parse(facts || sample.facts);
         const kit = await generateActionKit(validatedFacts, deadlineInfo);
+        console.log(`[API /generate] Mode: live (Sample: ${sampleId}) - Generation SUCCESS`);
         return NextResponse.json(kit);
       } catch (geminiError) {
         console.warn(`[API /generate] Live generation failed for sample ${sampleId}, falling back to golden data:`, geminiError);
@@ -49,6 +52,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Missing extracted facts in request body.' }, { status: 400 });
     }
 
+    console.log(`[API /generate] Mode: live (Custom upload) - Calling Gemini Flash API`);
     const validatedFacts = ExtractedFactsSchema.parse(facts);
     const kit = await generateActionKit(validatedFacts, deadlineInfo || {
       targetDate: null,
@@ -56,6 +60,7 @@ export async function POST(req: NextRequest) {
       isEstimated: false,
       daysRemaining: null,
     });
+    console.log(`[API /generate] Mode: live (Custom upload) - Generation SUCCESS`);
 
     return NextResponse.json(kit);
   } catch (error) {

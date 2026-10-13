@@ -75,30 +75,30 @@ export const AppealLetterTab: React.FC<AppealLetterTabProps> = ({
   };
 
   return (
-    <div className="space-y-4">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-slate-50 border border-slate-200/80 rounded-xl p-3 sm:px-4">
-        <div className="text-xs text-slate-600">
-          <span className="font-semibold text-slate-800">Ready to send: </span>
+    <div className="space-y-4 min-w-0">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-slate-50 border border-slate-200/80 rounded-xl p-3 sm:px-4 min-w-0">
+        <div className="text-xs text-slate-600 min-w-0 text-pretty">
+          <span className="font-semibold text-slate-800 whitespace-nowrap">Ready to send: </span>
           Facts are pre-filled. Complete the{' '}
-          <span className="bg-amber-100 text-amber-900 font-semibold px-1 rounded text-[11px]">
+          <span className="bg-amber-100 text-amber-900 font-semibold px-1 rounded text-[11px] whitespace-nowrap">
             [highlighted]
           </span>{' '}
           placeholders before mailing.
         </div>
 
-        <div className="flex items-center space-x-2 self-end sm:self-auto">
+        <div className="flex items-center space-x-2 self-start sm:self-auto flex-shrink-0">
           <button
             onClick={handleCopy}
-            className="inline-flex items-center text-xs font-semibold px-3 py-1.5 rounded-lg border border-slate-300 bg-white hover:bg-slate-50 text-slate-700 shadow-2xs transition-colors"
+            className="whitespace-nowrap flex-shrink-0 inline-flex items-center text-xs font-semibold px-3 py-1.5 rounded-lg border border-slate-300 bg-white hover:bg-slate-50 text-slate-700 shadow-2xs transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-600 focus-visible:ring-offset-2"
           >
             {copied ? (
               <>
-                <Check className="w-3.5 h-3.5 mr-1 text-teal-600" />
+                <Check className="w-3.5 h-3.5 mr-1 text-teal-600 flex-shrink-0" />
                 Copied!
               </>
             ) : (
               <>
-                <Copy className="w-3.5 h-3.5 mr-1 text-slate-500" />
+                <Copy className="w-3.5 h-3.5 mr-1 text-slate-500 flex-shrink-0" />
                 Copy Letter
               </>
             )}
@@ -106,17 +106,17 @@ export const AppealLetterTab: React.FC<AppealLetterTabProps> = ({
 
           <button
             onClick={handleDownload}
-            className="inline-flex items-center text-xs font-semibold px-3 py-1.5 rounded-lg bg-teal-600 hover:bg-teal-700 text-white shadow-2xs transition-colors"
+            className="whitespace-nowrap flex-shrink-0 inline-flex items-center text-xs font-semibold px-3 py-1.5 rounded-lg bg-teal-600 hover:bg-teal-700 text-white shadow-2xs transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-600 focus-visible:ring-offset-2"
           >
-            <Download className="w-3.5 h-3.5 mr-1" />
+            <Download className="w-3.5 h-3.5 mr-1 flex-shrink-0" />
             Download .txt
           </button>
         </div>
       </div>
 
-      <div className="bg-white border border-slate-200 rounded-xl p-6 sm:p-8 font-mono text-xs sm:text-[13px] text-slate-800 leading-relaxed shadow-2xs overflow-x-auto whitespace-pre-wrap max-h-[600px] overflow-y-auto">
-        <div className="flex items-center space-x-2 pb-4 mb-4 border-b border-slate-100 text-slate-400 font-sans text-xs">
-          <FileText className="w-4 h-4 text-teal-600" />
+      <div className="bg-white border border-slate-200 rounded-xl p-5 sm:p-7 font-mono text-xs sm:text-[13px] text-slate-800 leading-relaxed shadow-2xs overflow-x-auto whitespace-pre-wrap break-words max-h-[600px] overflow-y-auto min-w-0">
+        <div className="flex items-center space-x-2 pb-4 mb-4 border-b border-slate-100 text-slate-400 font-sans text-xs whitespace-nowrap">
+          <FileText className="w-4 h-4 text-teal-600 flex-shrink-0" />
           <span>Formal Appeal Document Preview</span>
         </div>
         {renderStyledLetter()}
