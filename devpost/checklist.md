@@ -59,7 +59,7 @@ Build mode: learn
   Learner check: Add your `GEMINI_API_KEY` to `.env.local` and test analyzing the 4th synthetic letter through the upload box.
   Commit: `Implement Gemini extract and generate routes and connect live pipeline`
 
-- [ ] **5. Demo-recording switch (DEMO_MODE=cached), golden fallback safety net, and server-side PDF validation**
+- [x] **5. Demo-recording switch (DEMO_MODE=cached), golden fallback safety net, and server-side PDF validation**
   Becomes usable: Demo safety and validation engine. Adding `DEMO_MODE=cached` to `.env.local` forces the 3 samples to return deterministic golden data for video recording. Without it, live pipeline runs with automatic fallback to golden data on failure. Server-side `pdf-lib` inspects PDFs, rejecting multi-page files with a 400 error, and enforces the 3 MB upload limit.
   Why now: Ensures 100% reproducible video recording while protecting production deployments from invalid uploads or rate-limit failures.
   PRD ref: `prd.md > States and Boundaries > Upload Error State & API Error State`
