@@ -19,7 +19,7 @@ Build mode: learn
   Learner check: Inspect `types/appeal.ts` and `lib/schemas.ts` and confirm all fields match the spec.
   Commit: `Initialize project with Next.js, Tailwind, types, and Zod schemas`
 
-- [ ] **2. Date calculator, ics generator, and passing Vitest test suite**
+- [x] **2. Date calculator, ics generator, and passing Vitest test suite**
   Becomes usable: A thoroughly tested, pure TypeScript date calculation engine (`lib/date-calculator.ts`) handling explicit dates, 180-day relative projections, and missing dates with date-only math (no UTC timezone shifts), plus RFC 5545 `.ics` builder (`lib/ics-generator.ts`) with line-folding and automated alarm triggers, all verified green by Vitest.
   Why now: Risk-first. Date arithmetic and calendar generation are critical algorithms that must never be wrong or hallucinated; proving them in isolation with automated tests ensures bulletproof reliability before building the UI.
   PRD ref: `prd.md > Features and Behavior > 3. Plain-English Explanation Card`, `prd.md > Features and Behavior > 4. 3-Piece Action Kit`
