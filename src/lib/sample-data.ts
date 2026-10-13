@@ -291,3 +291,7 @@ Sincerely,
     },
   },
 ];
+
+export const SAMPLE_CASES: Record<string, SampleCase> = Object.fromEntries(
+  SAMPLES.map((s) => [s.id, s])
+);

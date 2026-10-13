@@ -12,7 +12,7 @@ import { Footer } from '@/components/Footer';
 import { SampleCase, SAMPLES } from '@/lib/sample-data';
 import { ExtractedFacts, ComputedDeadline, GeneratedKit } from '@/types/appeal';
 import { calculateDeadline, createManualDeadline } from '@/lib/date-calculator';
-import { ShieldAlert } from 'lucide-react';
+import { ShieldAlert, AlertCircle } from 'lucide-react';
 
 export default function Home() {
   const [selectedSample, setSelectedSample] = useState<SampleCase | null>(null);
@@ -21,7 +21,10 @@ export default function Home() {
   const [documentTitle, setDocumentTitle] = useState<string>('');
   const [isPdf, setIsPdf] = useState(false);
 
-  // Analysis simulation state for Slice 3b (golden data flow)
+  // Error state for failed uploads or network errors
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  // Analysis state
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [currentStep, setCurrentStep] = useState(1);
   const [isComplete, setIsComplete] = useState(false);
@@ -31,69 +34,112 @@ export default function Home() {
   const [deadline, setDeadline] = useState<ComputedDeadline | null>(null);
   const [kit, setKit] = useState<GeneratedKit | null>(null);
 
-  const startAnalysisWithGoldenData = (sample: SampleCase) => {
-    setSelectedSample(sample);
-    setDocumentTitle(sample.title);
-    setPreviewUrl(sample.imagePath);
-    setIsPdf(false);
+  const runPipeline = async (input: { sampleId?: string; file?: File; sampleFallback?: SampleCase }) => {
     setIsAnalyzing(true);
-    setCurrentStep(1);
+    setCurrentStep(1); // Step 1: "Reading your letter"
     setIsComplete(false);
+    setFacts(null);
+    setDeadline(null);
+    setKit(null);
+    setErrorMessage(null);
 
-    // Initial facts and computed deadline from golden sample
-    setFacts({ ...sample.facts });
-    const computed = calculateDeadline({
-      deadlineType: sample.facts.deadlineType,
-      explicitDate: sample.facts.explicitDate,
-      relativeDays: sample.facts.relativeDays,
-      letterDate: sample.facts.letterDate,
-    });
-    setDeadline(computed);
-    setKit({ ...sample.kit });
+    try {
+      // Stage 1: Call /api/extract (multimodal extraction)
+      const formData = new FormData();
+      if (input.sampleId) formData.append('sampleId', input.sampleId);
+      if (input.file) formData.append('file', input.file);
 
-    // Step-by-step progress simulation for Slice 3b
-    setTimeout(() => setCurrentStep(2), 400);
-    setTimeout(() => setCurrentStep(3), 900);
-    setTimeout(() => setCurrentStep(4), 1400);
-    setTimeout(() => {
+      const extractRes = await fetch('/api/extract', {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (!extractRes.ok) {
+        const errData = await extractRes.json().catch(() => ({ error: 'Document extraction failed.' }));
+        throw new Error(errData.error || 'Failed to extract letter details.');
+      }
+
+      const extractedFacts: ExtractedFacts = await extractRes.json();
+      setCurrentStep(2); // Step 2: "Finding denial reason, amount, and deadline"
+
+      // Stage 2: Deterministic TypeScript date engine
+      const computed = calculateDeadline({
+        deadlineType: extractedFacts.deadlineType,
+        explicitDate: extractedFacts.explicitDate,
+        relativeDays: extractedFacts.relativeDays,
+        letterDate: extractedFacts.letterDate,
+      });
+
+      setFacts(extractedFacts);
+      setDeadline(computed);
+
+      // Stage 3: Call /api/generate (Action Kit generation)
+      setCurrentStep(3); // Step 3: "Translating into plain English"
+      const generateRes = await fetch('/api/generate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          facts: extractedFacts,
+          deadlineInfo: computed,
+          sampleId: input.sampleId,
+        }),
+      });
+
+      if (!generateRes.ok) {
+        const errData = await generateRes.json().catch(() => ({ error: 'Action kit generation failed.' }));
+        throw new Error(errData.error || 'Failed to generate action kit.');
+      }
+
+      const generatedKit: GeneratedKit = await generateRes.json();
+
+      // Stage 4: Render results
+      setCurrentStep(4); // Step 4: "Building your action kit"
+      setKit(generatedKit);
       setIsComplete(true);
-    }, 1900);
+    } catch (err: unknown) {
+      console.error('Pipeline error:', err);
+
+      // If sample was selected and live call failed, activate client golden fallback
+      if (input.sampleFallback) {
+        console.warn('Network call failed for sample, activating golden fallback');
+        const fallback = input.sampleFallback;
+        setFacts({ ...fallback.facts });
+        const computed = calculateDeadline({
+          deadlineType: fallback.facts.deadlineType,
+          explicitDate: fallback.facts.explicitDate,
+          relativeDays: fallback.facts.relativeDays,
+          letterDate: fallback.facts.letterDate,
+        });
+        setDeadline(computed);
+        setKit({ ...fallback.kit });
+        setCurrentStep(4);
+        setIsComplete(true);
+        return;
+      }
+
+      const message = err instanceof Error ? err.message : 'Analysis failed. Please try again.';
+      setErrorMessage(message);
+      setIsAnalyzing(false);
+    }
   };
 
   const handleSelectSample = (sample: SampleCase) => {
-    startAnalysisWithGoldenData(sample);
+    setSelectedSample(sample);
+    setUploadedFile(null);
+    setDocumentTitle(sample.title);
+    setPreviewUrl(sample.imagePath);
+    setIsPdf(false);
+    runPipeline({ sampleId: sample.id, sampleFallback: sample });
   };
 
   const handleFileUpload = (file: File) => {
-    // For Slice 3b UI testing, use Sample 1 as mock target until Slice 4 connects live Gemini API
     const url = URL.createObjectURL(file);
+    setSelectedSample(null);
     setUploadedFile(file);
-    const pdf = file.type === 'application/pdf';
     setDocumentTitle(file.name);
     setPreviewUrl(url);
-    setIsPdf(pdf);
-    setIsAnalyzing(true);
-    setCurrentStep(1);
-    setIsComplete(false);
-
-    // Default mock data for file upload in Slice 3b UI mode
-    const fallbackSample = SAMPLES[0];
-    setFacts({ ...fallbackSample.facts });
-    const computed = calculateDeadline({
-      deadlineType: fallbackSample.facts.deadlineType,
-      explicitDate: fallbackSample.facts.explicitDate,
-      relativeDays: fallbackSample.facts.relativeDays,
-      letterDate: fallbackSample.facts.letterDate,
-    });
-    setDeadline(computed);
-    setKit({ ...fallbackSample.kit });
-
-    setTimeout(() => setCurrentStep(2), 400);
-    setTimeout(() => setCurrentStep(3), 900);
-    setTimeout(() => setCurrentStep(4), 1400);
-    setTimeout(() => {
-      setIsComplete(true);
-    }, 1900);
+    setIsPdf(file.type === 'application/pdf');
+    runPipeline({ file });
   };
 
   // Real-time fact editing in facts row (propagates instantly to letter)
@@ -135,6 +181,7 @@ export default function Home() {
     setFacts(null);
     setDeadline(null);
     setKit(null);
+    setErrorMessage(null);
   };
 
   return (
@@ -142,6 +189,27 @@ export default function Home() {
       <Header onStartOver={handleStartOver} showStartOver={isAnalyzing} />
 
       <main className="flex-1 max-w-6xl w-full mx-auto px-4 py-8 sm:py-12">
+        {errorMessage && (
+          <div
+            className="max-w-2xl mx-auto mb-8 p-4 rounded-xl bg-red-50 border border-red-200 text-red-900 flex items-start space-x-3 shadow-xs animate-fadeIn"
+            role="alert"
+          >
+            <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
+            <div className="flex-1 text-sm">
+              <h3 className="font-semibold text-red-950">We couldn&apos;t process this letter</h3>
+              <p className="mt-1 text-red-800">{errorMessage}</p>
+              <div className="mt-3 flex space-x-3">
+                <button
+                  onClick={handleStartOver}
+                  className="px-3.5 py-1.5 text-xs font-semibold rounded-lg bg-red-100 hover:bg-red-200 text-red-950 transition-colors"
+                >
+                  Try another document
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
         {!isAnalyzing ? (
           /* Landing View */
           <div className="max-w-4xl mx-auto space-y-10 animate-fadeIn">

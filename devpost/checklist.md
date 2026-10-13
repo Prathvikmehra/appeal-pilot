@@ -49,7 +49,7 @@ Build mode: learn
   Learner check: Open `http://localhost:3000`, test editing facts row fields, switch between the 3 tabs, test the "Change date" modal, download the `.ics` file, and test "Start over".
   Commit: `Add explanation card, reactive token replacement, Action Kit tabs, and ics download`
 
-- [ ] **4. Gemini extract and generate server routes, live upload test fixture, and live pipeline connection**
+- [x] **4. Gemini extract and generate server routes, live upload test fixture, and live pipeline connection**
   Becomes usable: Live AI processing pipeline. Server routes `/api/extract` (multimodal `@google/genai`) and `/api/generate` (text `@google/genai` with prompt defense and native responseSchema) connected sequentially to the UI. Includes a 4th standalone synthetic test letter (not in the sample cards) to prove the live upload path, plus a 2-page PDF fixture for rejection testing.
   Why now: Connects the live AI intelligence to an already tested UI foundation and proves both sample and custom file upload flows work end to end.
   PRD ref: `prd.md > Features and Behavior > 2. Analysis Pipeline & Progress Display`
