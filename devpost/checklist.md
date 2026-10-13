@@ -69,7 +69,7 @@ Build mode: learn
   Learner check: Set `DEMO_MODE=cached` in `.env.local` and confirm sample analysis is instant and deterministic for your video demo.
   Commit: `Add DEMO_MODE switch, sample fallback safety net, and pdf-lib page validation`
 
-- [ ] **6. Design polish, accessibility, external checks (KFF link, Gemini model, repo prep), and README**
+- [x] **6. Design polish, accessibility, external checks (KFF link, Gemini model, repo prep), and README**
   Becomes usable: Hackathon-ready production repository. Verified KFF link and statistic, verified model name in `GEMINI_MODEL`, verified zero personal data in any fixture or doc, keyboard-navigable tabs and focus rings, WCAG color contrast, and complete `README.md` with architecture diagram, demo video protocol, and transparent disclosures.
   Why now: Final polish and validation required for Devpost judging and repository release.
   PRD ref: `prd.md > Look and Feel`, `prd.md > What We're Building`
