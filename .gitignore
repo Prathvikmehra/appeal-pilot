@@ -13,3 +13,9 @@ dist/
 out/
 *.tsbuildinfo
 
+# Tooling & metadata
+.agents/
+.claude/
+agent/
+skills-lock.json
+

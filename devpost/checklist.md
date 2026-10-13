@@ -29,7 +29,7 @@ Build mode: learn
   Learner check: Run `npm test` in your terminal and verify all date edge cases and calendar formatting tests pass.
   Commit: `Add date calculator, ics generator, and passing Vitest test suite`
 
-- [ ] **3a. Sample letter PNGs, sample data, landing view, upload dropzone, letter preview, and progress tracker**
+- [x] **3a. Sample letter PNGs, sample data, landing view, upload dropzone, letter preview, and progress tracker**
   Becomes usable: Visual shell and document intake. Three realistic synthetic denial letter PNGs in `public/samples/` (fictional insurers, fake claim numbers, dates in early Oct 2026), `lib/sample-data.ts`, the landing page hero, sample selector cards, secondary upload dropzone, sticky letter viewer, and 4-step progress tracker.
   Why now: De-risks the visual intake layout and asset generation before building the complex result cards and interactive tabs.
   PRD ref: `prd.md > Screens and Layout > 1. Landing View`, `prd.md > Features and Behavior > 1. Sample Case & Upload Intake`
@@ -39,7 +39,7 @@ Build mode: learn
   Learner check: Open `http://localhost:3000`, see the landing cards with mini letter previews, click a card, and see the letter preview and progress tracker animate.
   Commit: `Build landing view, sample letter cards, uploader, preview, and progress tracker`
 
-- [ ] **3b. Plain-English explanation card, reactive facts row, Action Kit tabs, and .ics download**
+- [x] **3b. Plain-English explanation card, reactive facts row, Action Kit tabs, and .ics download**
   Becomes usable: Complete end-to-end interactive UI powered by golden data. Renders the Plain-English card (with deadline countdown and sourced KFF statistic) and 3-tab Action Kit (Appeal Letter, Phone Script, Calendar Reminder). Fact edits in the facts row reactively update the letter text in real time; "Change date" shifts urgency states; and `.ics` files download directly.
   Why now: Completes the full user journey on screen, enabling immediate hands-on verification of interactive token replacement and calendar export before connecting live network APIs.
   PRD ref: `prd.md > Features and Behavior > 3. Plain-English Explanation Card`, `prd.md > Features and Behavior > 4. 3-Piece Action Kit`
@@ -81,7 +81,7 @@ Build mode: learn
 
 ## Hands-on Checkpoints
 
-- [ ] Early usable behavior explored — Slice 3b (Full interactive UI running on golden data)
+- [x] Early usable behavior explored — Slice 3b (Full interactive UI running on golden data)
 - [ ] Final kick-the-tires exploration and feedback completed
 
 ## Final Review

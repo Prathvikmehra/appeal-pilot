@@ -6,8 +6,13 @@ import { SampleSelector } from '@/components/SampleSelector';
 import { FileUploader } from '@/components/FileUploader';
 import { LetterPreview } from '@/components/LetterPreview';
 import { ProgressTracker } from '@/components/ProgressTracker';
-import { SampleCase } from '@/lib/sample-data';
-import { ShieldAlert, ArrowRight } from 'lucide-react';
+import { ExplanationCard } from '@/components/ExplanationCard';
+import { ActionKit } from '@/components/ActionKit';
+import { Footer } from '@/components/Footer';
+import { SampleCase, SAMPLES } from '@/lib/sample-data';
+import { ExtractedFacts, ComputedDeadline, GeneratedKit } from '@/types/appeal';
+import { calculateDeadline, createManualDeadline } from '@/lib/date-calculator';
+import { ShieldAlert } from 'lucide-react';
 
 export default function Home() {
   const [selectedSample, setSelectedSample] = useState<SampleCase | null>(null);
@@ -16,38 +21,103 @@ export default function Home() {
   const [documentTitle, setDocumentTitle] = useState<string>('');
   const [isPdf, setIsPdf] = useState(false);
 
-  // Analysis simulation state for Slice 3a
+  // Analysis simulation state for Slice 3b (golden data flow)
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [currentStep, setCurrentStep] = useState(1);
   const [isComplete, setIsComplete] = useState(false);
 
-  const startAnalysis = (title: string, url: string, pdf = false, sample?: SampleCase) => {
-    setDocumentTitle(title);
-    setPreviewUrl(url);
-    setIsPdf(pdf);
-    if (sample) setSelectedSample(sample);
+  // Active results state
+  const [facts, setFacts] = useState<ExtractedFacts | null>(null);
+  const [deadline, setDeadline] = useState<ComputedDeadline | null>(null);
+  const [kit, setKit] = useState<GeneratedKit | null>(null);
+
+  const startAnalysisWithGoldenData = (sample: SampleCase) => {
+    setSelectedSample(sample);
+    setDocumentTitle(sample.title);
+    setPreviewUrl(sample.imagePath);
+    setIsPdf(false);
     setIsAnalyzing(true);
     setCurrentStep(1);
     setIsComplete(false);
 
-    // Simulate progress through the 4 steps for Slice 3a UI verification
-    setTimeout(() => setCurrentStep(2), 500);
-    setTimeout(() => setCurrentStep(3), 1100);
-    setTimeout(() => setCurrentStep(4), 1700);
+    // Initial facts and computed deadline from golden sample
+    setFacts({ ...sample.facts });
+    const computed = calculateDeadline({
+      deadlineType: sample.facts.deadlineType,
+      explicitDate: sample.facts.explicitDate,
+      relativeDays: sample.facts.relativeDays,
+      letterDate: sample.facts.letterDate,
+    });
+    setDeadline(computed);
+    setKit({ ...sample.kit });
+
+    // Step-by-step progress simulation for Slice 3b
+    setTimeout(() => setCurrentStep(2), 400);
+    setTimeout(() => setCurrentStep(3), 900);
+    setTimeout(() => setCurrentStep(4), 1400);
     setTimeout(() => {
       setIsComplete(true);
-    }, 2300);
+    }, 1900);
   };
 
   const handleSelectSample = (sample: SampleCase) => {
-    startAnalysis(sample.title, sample.imagePath, false, sample);
+    startAnalysisWithGoldenData(sample);
   };
 
   const handleFileUpload = (file: File) => {
+    // For Slice 3b UI testing, use Sample 1 as mock target until Slice 4 connects live Gemini API
     const url = URL.createObjectURL(file);
     setUploadedFile(file);
     const pdf = file.type === 'application/pdf';
-    startAnalysis(file.name, url, pdf);
+    setDocumentTitle(file.name);
+    setPreviewUrl(url);
+    setIsPdf(pdf);
+    setIsAnalyzing(true);
+    setCurrentStep(1);
+    setIsComplete(false);
+
+    // Default mock data for file upload in Slice 3b UI mode
+    const fallbackSample = SAMPLES[0];
+    setFacts({ ...fallbackSample.facts });
+    const computed = calculateDeadline({
+      deadlineType: fallbackSample.facts.deadlineType,
+      explicitDate: fallbackSample.facts.explicitDate,
+      relativeDays: fallbackSample.facts.relativeDays,
+      letterDate: fallbackSample.facts.letterDate,
+    });
+    setDeadline(computed);
+    setKit({ ...fallbackSample.kit });
+
+    setTimeout(() => setCurrentStep(2), 400);
+    setTimeout(() => setCurrentStep(3), 900);
+    setTimeout(() => setCurrentStep(4), 1400);
+    setTimeout(() => {
+      setIsComplete(true);
+    }, 1900);
+  };
+
+  // Real-time fact editing in facts row (propagates instantly to letter)
+  const handleUpdateFact = (field: keyof ExtractedFacts, value: string) => {
+    if (!facts) return;
+    const updatedFacts = { ...facts, [field]: value };
+    setFacts(updatedFacts);
+
+    // If letterDate changed and deadline is relative, recalculate deadline
+    if (field === 'letterDate' && facts.deadlineType === 'relative') {
+      const recalculated = calculateDeadline({
+        deadlineType: 'relative',
+        explicitDate: facts.explicitDate,
+        relativeDays: facts.relativeDays,
+        letterDate: value,
+      });
+      setDeadline(recalculated);
+    }
+  };
+
+  // Real-time deadline override via "Change date" modal
+  const handleUpdateDeadline = (newDateStr: string) => {
+    const updatedDeadline = createManualDeadline(newDateStr);
+    setDeadline(updatedDeadline);
   };
 
   const handleStartOver = () => {
@@ -62,6 +132,9 @@ export default function Home() {
     setIsAnalyzing(false);
     setCurrentStep(1);
     setIsComplete(false);
+    setFacts(null);
+    setDeadline(null);
+    setKit(null);
   };
 
   return (
@@ -112,7 +185,7 @@ export default function Home() {
             </div>
           </div>
         ) : (
-          /* Analysis View (Slice 3a layout) */
+          /* Analysis & Results View (Slice 3b complete flow) */
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start animate-fadeIn">
             {/* Left Column: Sticky Letter Preview */}
             <div className="lg:col-span-5 order-2 lg:order-1">
@@ -125,28 +198,32 @@ export default function Home() {
               )}
             </div>
 
-            {/* Right Column: Progress Tracker and upcoming Results */}
+            {/* Right Column: Progress Tracker, Explanation Card, Action Kit */}
             <div className="lg:col-span-7 order-1 lg:order-2 space-y-6">
               <ProgressTracker
                 currentStep={currentStep}
                 isComplete={isComplete}
-                collapsed={false}
+                collapsed={isComplete}
               />
 
-              {isComplete && (
-                <div className="bg-white border border-teal-200 rounded-xl p-6 shadow-xs text-center space-y-3 animate-fadeIn">
-                  <div className="inline-flex items-center justify-center h-12 w-12 rounded-full bg-teal-100 text-teal-700">
-                    <ArrowRight className="w-6 h-6" />
-                  </div>
-                  <h3 className="text-lg font-bold text-slate-900">
-                    Document Extracted & Parsed!
-                  </h3>
-                  <p className="text-sm text-slate-600 max-w-md mx-auto">
-                    Slice 3a verification complete: Document viewer, progress tracker, and sample intake are operational.
-                  </p>
-                  <p className="text-xs text-teal-700 font-medium">
-                    Ready for Slice 3b (Plain-English card, facts row, and Action Kit tabs).
-                  </p>
+              {isComplete && facts && deadline && kit && (
+                <div className="space-y-6 animate-fadeIn">
+                  {/* Plain-English Explanation Card */}
+                  <ExplanationCard
+                    facts={facts}
+                    deadline={deadline}
+                    kit={kit}
+                    onUpdateFact={handleUpdateFact}
+                    onUpdateDeadline={handleUpdateDeadline}
+                  />
+
+                  {/* 3-Piece Action Kit */}
+                  <ActionKit
+                    facts={facts}
+                    deadline={deadline}
+                    kit={kit}
+                    onSetDate={handleUpdateDeadline}
+                  />
                 </div>
               )}
             </div>
@@ -154,9 +231,7 @@ export default function Home() {
         )}
       </main>
 
-      <footer className="border-t border-slate-200 bg-white/50 py-6 mt-12 text-center text-xs text-slate-400">
-        <p>© 2026 Appeal Pilot • Synthetic health insurance appeal assistant</p>
-      </footer>
+      <Footer onStartOver={handleStartOver} showStartOver={isAnalyzing} />
     </div>
   );
 }
