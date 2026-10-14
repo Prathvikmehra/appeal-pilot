@@ -1,5 +1,6 @@
 import React from 'react';
 import { ShieldCheck, RotateCcw } from 'lucide-react';
+import { Logo } from './Logo';
 
 interface FooterProps {
   onStartOver?: () => void;
@@ -8,8 +9,13 @@ interface FooterProps {
 
 export const Footer: React.FC<FooterProps> = ({ onStartOver, showStartOver }) => {
   return (
-    <footer className="w-full border-t border-slate-200 bg-white/70 backdrop-blur-xs py-8 mt-16 text-slate-500 text-xs">
+    <footer className="w-full border-t border-slate-200 bg-white/70 backdrop-blur-xs py-10 mt-16 text-slate-500 text-xs">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center space-y-4 text-center">
+        {/* Brand Logo in Footer */}
+        <div className="flex items-center justify-center">
+          <Logo size="sm" />
+        </div>
+
         {showStartOver && (
           <button
             onClick={onStartOver}

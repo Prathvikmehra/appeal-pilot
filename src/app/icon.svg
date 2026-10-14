@@ -1,0 +1,31 @@
+<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Rounded squircle badge in muted teal-600 -->
+  <rect width="32" height="32" rx="7.5" fill="#0D9488" />
+
+  <!-- Action Checkmark Tick in lower-left launch trail -->
+  <path
+    d="M6 22.5L9.5 26L15.5 20"
+    stroke="#FFFFFF"
+    stroke-width="2.2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  />
+
+  <!-- Paper Plane: Main Left Wing -->
+  <path
+    d="M25.5 6.5L6.8 15.2C5.9 15.6 5.9 16.9 6.8 17.3L13.8 20.3L25.5 6.5Z"
+    fill="#FFFFFF"
+  />
+
+  <!-- Paper Plane: Right Wing Fold -->
+  <path
+    d="M25.5 6.5L13.8 20.3L16.8 25.4C17.2 26.2 18.4 26.2 18.8 25.3L25.5 6.5Z"
+    fill="#99F6E4"
+  />
+
+  <!-- Keel fold accent in deep teal-700 -->
+  <path
+    d="M13.8 20.3L16.2 24.1L17.5 21.5L13.8 20.3Z"
+    fill="#0F766E"
+  />
+</svg>
