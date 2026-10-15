@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Appeal Pilot — App Map & Architecture Reference</title>
+  <style>
+    :root {
+      --slate-50: #f8fafc;
+      --slate-100: #f1f5f9;
+      --slate-200: #e2e8f0;
+      --slate-600: #475569;
+      --slate-700: #334155;
+      --slate-800: #1e293b;
+      --slate-900: #0f172a;
+      --teal-50: #f0fdfa;
+      --teal-100: #ccfbf1;
+      --teal-600: #0d9488;
+      --teal-700: #0f766e;
+      --teal-800: #115e59;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: var(--slate-50);
+      color: var(--slate-900);
+      line-height: 1.6;
+      padding: 32px 16px;
+    }
+    .container {
+      max-width: 860px;
+      margin: 0 auto;
+      background: #ffffff;
+      border: 1px solid var(--slate-200);
+      border-radius: 16px;
+      padding: 36px 32px;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    }
+    header {
+      border-bottom: 1px solid var(--slate-200);
+      padding-bottom: 24px;
+      margin-bottom: 28px;
+    }
+    .badge {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      background: var(--teal-100);
+      color: var(--teal-800);
+      padding: 4px 10px;
+      border-radius: 9999px;
+      margin-bottom: 12px;
+    }
+    h1 { font-size: 26px; color: var(--slate-900); margin-bottom: 8px; }
+    p.subtitle { font-size: 15px; color: var(--slate-600); }
+    h2 { font-size: 18px; color: var(--slate-800); margin: 28px 0 14px 0; border-left: 4px solid var(--teal-600); padding-left: 10px; }
+    p, li { font-size: 14px; color: var(--slate-700); }
+    ul { list-style: disc; margin-left: 20px; margin-top: 8px; }
+    li { margin-bottom: 6px; }
+    .diagram-card {
+      background: var(--slate-50);
+      border: 1px solid var(--slate-200);
+      border-radius: 12px;
+      padding: 20px;
+      margin: 16px 0;
+      text-align: center;
+      overflow-x: auto;
+    }
+    .route-stop {
+      background: var(--slate-50);
+      border: 1px solid var(--slate-200);
+      border-radius: 10px;
+      padding: 16px;
+      margin-bottom: 12px;
+    }
+    .route-stop strong { color: var(--teal-700); font-size: 14px; }
+    .file-path {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 12px;
+      background: var(--slate-200);
+      color: var(--slate-900);
+      padding: 2px 6px;
+      border-radius: 4px;
+      display: inline-block;
+      margin: 4px 0 8px 0;
+    }
+    .practice-box {
+      background: var(--teal-50);
+      border: 1px solid var(--teal-100);
+      border-left: 4px solid var(--teal-600);
+      border-radius: 10px;
+      padding: 18px;
+      margin-top: 20px;
+    }
+    .practice-box h3 { font-size: 15px; color: var(--teal-800); margin-bottom: 6px; }
+    details {
+      margin-top: 12px;
+      border: 1px solid var(--slate-200);
+      border-radius: 8px;
+      padding: 10px 14px;
+      background: #ffffff;
+    }
+    summary { font-size: 13px; font-weight: 600; cursor: pointer; color: var(--slate-800); }
+    details p { margin-top: 8px; font-size: 13px; color: var(--slate-600); }
+    footer {
+      margin-top: 36px;
+      padding-top: 20px;
+      border-top: 1px solid var(--slate-200);
+      font-size: 12px;
+      color: var(--slate-600);
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <span class="badge">App Map & Architecture</span>
+      <h1>Appeal Pilot</h1>
+      <p class="subtitle">Turn confusing health insurance denials into clear, actionable appeal plans in under 60 seconds.</p>
+    </header>
+
+    <section>
+      <h2>What Appeal Pilot Does</h2>
+      <p>
+        When a user uploads a health insurance denial notice (or chooses a sample case), Appeal Pilot translates cryptic denial jargon into plain English, executes deterministic integer date arithmetic to pin down the exact deadline, and equips the patient with a 3-piece Action Kit: a formal appeal letter, a 4-part phone negotiation script, and an RFC 5545 <code>.ics</code> calendar reminder alarm.
+      </p>
+    </section>
+
+    <section>
+      <h2>System Architecture Diagram</h2>
+      <div class="diagram-card">
+        <svg viewBox="0 0 760 210" width="100%" height="210" xmlns="http://www.w3.org/2000/svg" style="max-width: 720px; font-family: sans-serif;">
+          <!-- Node 1: Input -->
+          <rect x="10" y="70" width="130" height="70" rx="8" fill="#F1F5F9" stroke="#CBD5E1" stroke-width="2"/>
+          <text x="75" y="98" font-size="12" font-weight="bold" fill="#0F172A" text-anchor="middle">Notice / Upload</text>
+          <text x="75" y="118" font-size="10" fill="#64748B" text-anchor="middle">PNG, JPG, PDF</text>
+
+          <!-- Arrow 1 -->
+          <path d="M 140 105 L 180 105" stroke="#0D9488" stroke-width="2" marker-end="url(#arrow)"/>
+
+          <!-- Node 2: Stage 1 Extract -->
+          <rect x="180" y="55" width="150" height="100" rx="8" fill="#F0FDFA" stroke="#0D9488" stroke-width="2"/>
+          <text x="255" y="82" font-size="12" font-weight="bold" fill="#0F766E" text-anchor="middle">1. Vision OCR</text>
+          <text x="255" y="102" font-size="10" fill="#334155" text-anchor="middle">/api/extract</text>
+          <text x="255" y="120" font-size="10" fill="#64748B" text-anchor="middle">Gemini Flash + Zod</text>
+          <text x="255" y="136" font-size="9" fill="#0D9488" text-anchor="middle">Raw facts &amp; codes</text>
+
+          <!-- Arrow 2 -->
+          <path d="M 330 105 L 370 105" stroke="#0D9488" stroke-width="2"/>
+
+          <!-- Node 3: Deterministic Date Engine -->
+          <rect x="370" y="55" width="160" height="100" rx="8" fill="#FFFBEB" stroke="#F59E0B" stroke-width="2"/>
+          <text x="450" y="80" font-size="12" font-weight="bold" fill="#92400E" text-anchor="middle">2. Date Engine</text>
+          <text x="450" y="100" font-size="10" fill="#78350F" text-anchor="middle">TypeScript (in code)</text>
+          <text x="450" y="118" font-size="9" fill="#64748B" text-anchor="middle">Integer [Y,M,D] Math</text>
+          <text x="450" y="134" font-size="9" fill="#B45309" text-anchor="middle">Zero timezone shift</text>
+
+          <!-- Arrow 3 -->
+          <path d="M 530 105 L 570 105" stroke="#0D9488" stroke-width="2"/>
+
+          <!-- Node 4: Stage 2 Generate -->
+          <rect x="570" y="55" width="170" height="100" rx="8" fill="#F0FDFA" stroke="#0D9488" stroke-width="2"/>
+          <text x="655" y="80" font-size="12" font-weight="bold" fill="#0F766E" text-anchor="middle">3. Action Kit</text>
+          <text x="655" y="98" font-size="10" fill="#334155" text-anchor="middle">/api/generate</text>
+          <text x="655" y="116" font-size="9" fill="#64748B" text-anchor="middle">Dispute Letter Template</text>
+          <text x="655" y="132" font-size="9" fill="#0D9488" text-anchor="middle">Phone Script &amp; .ics</text>
+
+          <defs>
+            <marker id="arrow" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+              <path d="M 0 0 L 10 5 L 0 10 z" fill="#0D9488"/>
+            </marker>
+          </defs>
+        </svg>
+      </div>
+    </section>
+
+    <section>
+      <h2>3-Stop Reference Route</h2>
+
+      <div class="route-stop">
+        <strong>Stop 1: Multimodal Vision &amp; Structured Validation</strong>
+        <div class="file-path">src/lib/gemini.ts &rarr; extractDocumentFacts()</div>
+        <p>Receives base64 image or single-page PDF data, enforces system prompt injection defenses, calls Gemini Flash with native <code>responseSchema</code>, and parses the extracted facts with Zod.</p>
+      </div>
+
+      <div class="route-stop">
+        <strong>Stop 2: Zero-Timezone Deterministic Date Engine</strong>
+        <div class="file-path">src/lib/date-calculator.ts &rarr; calculateDeadline()</div>
+        <p>Takes the extracted letter date and statutory deadline phrase, computing exact calendar dates as discrete integer tuples [YYYY, MM, DD]. Eliminates UTC-to-local timezone rollbacks and calculates accurate reminder alarms (14/3 days or 7/1 days).</p>
+      </div>
+
+      <div class="route-stop">
+        <strong>Stop 3: Reactive Fact Editing &amp; Token Replacement</strong>
+        <div class="file-path">src/components/ExplanationCard.tsx &amp; src/components/tabs/AppealLetterTab.tsx</div>
+        <p>Renders the verified case facts (Insurer, Claim #, Amount, Date). Edits propagate instantly to the appeal letter via tokens (<code>{{INSURER}}</code>, <code>{{CLAIM_NUMBER}}</code>) in local state, requiring zero round-trip AI latency.</p>
+      </div>
+    </section>
+
+    <section>
+      <h2>To Change This, Start Here</h2>
+      <ul>
+        <li><strong>Add/Modify Sample Letters:</strong> <code>src/lib/sample-data.ts</code> contains golden facts and templates.</li>
+        <li><strong>Modify Calendar Alarm Schedules:</strong> <code>src/lib/date-calculator.ts</code> sets reminder days (14/3 for estimated, 7/1 for explicit).</li>
+        <li><strong>Adjust AI Extraction Prompts:</strong> <code>src/lib/gemini.ts</code> holds the system instructions and Zod schemas.</li>
+        <li><strong>Update Visual Theme &amp; Colors:</strong> <code>src/components/Logo.tsx</code> and <code>tailwind.config.ts</code> control typography and brand tokens.</li>
+      </ul>
+    </section>
+
+    <div class="practice-box">
+      <h3>A Practice to Reuse: Deterministic Logic First, AI for Language</h3>
+      <p>
+        <strong>The Problem:</strong> Large Language Models are prone to arithmetic errors, calendar hallucinations, and date shifting. Having an AI guess deadlines or calculate days-left introduces subtle, unacceptable mistakes.<br><br>
+        <strong>The Solution in Appeal Pilot:</strong> We strictly decoupled the tasks. The AI is tasked solely with reading literal words and writing empathetic, professional prose. All date math, deadline calculations, calendar formatting, and field edits are handled in deterministic TypeScript code. This ensures 100% mathematical reliability, zero timezone drift, and instant real-time client edits without API latency.
+      </p>
+    </div>
+
+    <details>
+      <summary>How to Run Locally</summary>
+      <p>
+        Run <code>npm run dev</code> and open <a href="http://localhost:3000">http://localhost:3000</a>.<br>
+        Run unit tests with <code>npm test</code>.<br>
+        Run live Gemini Vision tests with <code>npm run test:live</code> (requires <code>GEMINI_API_KEY</code> in <code>.env.local</code>).
+      </p>
+    </details>
+
+    <footer>
+      <span>Appeal Pilot • Devpost Build With AI: Basics</span>
+      <span>Verified Snapshot: Clean Build &amp; All Tests Passing</span>
+    </footer>
+  </div>
+</body>
+</html>

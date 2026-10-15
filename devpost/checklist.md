@@ -82,23 +82,28 @@ Build mode: learn
 ## Hands-on Checkpoints
 
 - [x] Early usable behavior explored — Slice 3b (Full interactive UI running on golden data)
-- [ ] Final kick-the-tires exploration and feedback completed
+- [x] Final kick-the-tires exploration and feedback completed
 
 ## Final Review
 
-- [ ] Final review complete — feedback resolved and learner confirms ready to ship
+- [x] Final review complete — feedback resolved and learner confirms ready to ship
 
 ## Code Tour and App Map
 
-- [ ] Learning activity complete — guided route, focused alternative, prior practice connected, or brief recap
-- [ ] Optional edit and transfer reflection addressed — offered/declined/already covered/not applicable as appropriate
-- [ ] `devpost/app-map.html` generated from finished code, checked, and shown, including a project-grounded practice to reuse
+- [x] Learning activity complete — guided route, focused alternative, prior practice connected, or brief recap
+- [x] Optional edit and transfer reflection addressed — offered/declined/already covered/not applicable as appropriate
+- [x] `devpost/app-map.html` generated from finished code, checked, and shown, including a project-grounded practice to reuse
 
-Activity and evidence: [to be recorded upon completion]
-Route and stops: [to be recorded upon completion]
-Edit outcome: [to be recorded upon completion]
-Reflection: [to be recorded upon completion]
-Activity mode: [to be recorded upon completion]
+Activity and evidence: Focused architectural walkthrough connecting the learner's desired learning outcome (guiding AI coding agents without confusion or regressions) to the 2-stage decoupled pipeline (multimodal vision extraction + deterministic integer date engine + reactive token replacement).
+Route and stops: 3-stop reference route documented in devpost/app-map.html: (1) src/lib/gemini.ts (multimodal extraction & prompt defense), (2) src/lib/date-calculator.ts (zero-drift integer calendar math), (3) src/components/ExplanationCard.tsx (client reactive token propagation).
+Edit outcome: Brand logo component created (src/components/Logo.tsx), favicon (src/app/icon.svg), apple-icon.tsx, opengraph-image.tsx, and NEXT_PUBLIC_SITE_URL configured in layout.tsx and .env.example.
+Reflection: Strict boundary separation—letting the LLM handle perception and prose while deterministic TypeScript handles math, calendar formats, and client edits—prevents agent hallucinations and layout regressions.
+Activity mode: Fast mode focused technical synthesis and app map generation.
 
 ## Revisions
 
+- **Design Polish Pass**: Overhauled layout, padding, and text wrapping across 375px, 768px, 1024px, and 1440px viewports using `whitespace-nowrap`, `min-w-0`, `text-balance`, and responsive grid wrappers.
+- **Ellipsis Removal**: Removed `truncate` from insurer name, claim number, document title, and progress status so user-facing text is never clipped.
+- **Live Multimodal Vision Verification**: Verified end-to-end multimodal extraction and Action Kit generation using `gemini-3.1-flash-lite` on both synthetic test PDF and sample PNG notice.
+- **Test Suite Optimization**: Configured auto-skipping for live Gemini tests during plain `npm test` (passes in ~2s with zero setup), and added dedicated `npm run test:live` script for live API testing.
+- **Logo & Brand Assets**: Created crisp flat vector logo mark, wordmark component (`src/components/Logo.tsx`), SVG favicon, Apple Touch Icon, 1200x630 social preview card (`src/app/opengraph-image.tsx`), and `NEXT_PUBLIC_SITE_URL` metadata configuration.
