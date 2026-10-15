@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import './globals.css';
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || 'https://appealpilot.org'),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'),
   title: 'Appeal Pilot — Turn Insurance Denials Into Action',
   description:
     'Turn confusing health insurance denial letters into a plan you can act on today. Upload a letter to get a plain-English breakdown, ready-to-send dispute letter, phone script, and deadline calendar reminder.',
