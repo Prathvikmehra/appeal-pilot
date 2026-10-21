@@ -99,7 +99,7 @@ Appeal Pilot never presents a guessed deadline as certain:
 
 ### Sourced Research Context
 The explanation card includes a verified, static benchmark statistic:
-> *"In Medicare Advantage, only about 11.5% of denials were appealed in 2024, yet about 80% of those appeals were overturned ([KFF, 2024](https://www.kff.org/medicare/issue-brief/overturned-denials-in-medicare-advantage/)). Appeals are often worth trying, though this figure covers Medicare Advantage and offers no guarantee for your specific case."*
+> *"In Medicare Advantage, only about 11.5% of denied prior authorization requests were appealed in 2024, yet about 80% of appeals were partially or fully overturned ([KFF, 2024](https://www.kff.org/medicare/medicare-advantage-insurers-made-nearly-53-million-prior-authorization-determinations-in-2024/)). Appeals are often worth trying, though this figure covers Medicare Advantage and offers no guarantee for your specific case."*
 
 ### AI Model & Fallback Architecture
 - **AI Model**: Built with **Google Gemini Flash** (`gemini-3.1-flash-lite`), configurable via the `GEMINI_MODEL` environment variable. An optional `GEMINI_FALLBACK_MODEL` variable can also be set. Note that Google AI Studio model names evolve over time—always verify currently active Flash model identifiers in [Google AI Studio](https://aistudio.google.com/).

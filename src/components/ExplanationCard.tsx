@@ -258,9 +258,9 @@ export const ExplanationCard: React.FC<ExplanationCardProps> = ({
         </div>
         <div className="text-pretty leading-relaxed min-w-0">
           <span className="font-semibold text-slate-800">Good to know: </span>
-          In Medicare Advantage, only about 11.5% of denials were appealed in 2024, yet about 80% of those appeals were overturned (
+          In Medicare Advantage, only about 11.5% of denied prior authorization requests were appealed in 2024, yet about 80% of appeals were partially or fully overturned (
           <a
-            href="https://www.kff.org/medicare/issue-brief/overturned-denials-in-medicare-advantage/"
+            href="https://www.kff.org/medicare/medicare-advantage-insurers-made-nearly-53-million-prior-authorization-determinations-in-2024/"
             target="_blank"
             rel="noopener noreferrer"
             className="text-teal-700 underline font-medium inline-flex items-center hover:text-teal-800 whitespace-nowrap"

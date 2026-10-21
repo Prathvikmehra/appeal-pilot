@@ -148,7 +148,7 @@ Implements `prd.md > Look and Feel` and `scope.md > Inspiration & Identity`.
   - **Facts Row**: Interactive inputs for Insurer, Claim #, Disputed Amount, and Letter Date (edits instantly propagate to letter).
   - **Why They Denied It**: Jargon/code tags with plain-English interpretations.
   - **What This Means for You**: Advisory note on available options.
-  - **Good to Know**: Hardcoded, static sourced statistic: *"In Medicare Advantage, only about 11.5% of denials were appealed in 2024, yet about 80% of those appeals were overturned ([KFF, 2024](https://www.kff.org/medicare/issue-brief/overturned-denials-in-medicare-advantage/)). Appeals are often worth trying, though this offers no guarantee for your specific case."*
+  - **Good to Know**: Hardcoded, static sourced statistic: *"In Medicare Advantage, only about 11.5% of denied prior authorization requests were appealed in 2024, yet about 80% of appeals were partially or fully overturned ([KFF, 2024](https://www.kff.org/medicare/medicare-advantage-insurers-made-nearly-53-million-prior-authorization-determinations-in-2024/)). Appeals are often worth trying, though this offers no guarantee for your specific case."*
 - Implements `prd.md > Features and Behavior > 3. Plain-English Explanation Card`.
 
 ### 7. ActionKit (`components/ActionKit.tsx`)
