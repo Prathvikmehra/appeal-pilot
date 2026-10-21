@@ -102,7 +102,8 @@ The explanation card includes a verified, static benchmark statistic:
 > *"In Medicare Advantage, only about 11.5% of denials were appealed in 2024, yet about 80% of those appeals were overturned ([KFF, 2024](https://www.kff.org/medicare/issue-brief/overturned-denials-in-medicare-advantage/)). Appeals are often worth trying, though this figure covers Medicare Advantage and offers no guarantee for your specific case."*
 
 ### AI Model & Fallback Architecture
-- **AI Model**: Built with **Google Gemini Flash** (`gemini-3.1-flash-lite`), configurable via the `GEMINI_MODEL` environment variable.
+- **AI Model**: Built with **Google Gemini Flash** (`gemini-3.1-flash-lite`), configurable via the `GEMINI_MODEL` environment variable. An optional `GEMINI_FALLBACK_MODEL` variable can also be set. Note that Google AI Studio model names evolve over time—always verify currently active Flash model identifiers in [Google AI Studio](https://aistudio.google.com/).
+- **Transient Error Backoff & Fallback**: If the primary Gemini model encounters capacity spikes (HTTP 503) or rate limits (HTTP 429), Appeal Pilot automatically retries with exponential backoff (~1s then ~3s), followed by a single attempt with `GEMINI_FALLBACK_MODEL` before gracefully degrading.
 - **Deterministic Cached Fallback**: All three built-in sample cases have a complete set of pre-computed golden fallback data. If an API key is omitted, hits a quota rate limit, or fails validation, Appeal Pilot automatically falls back to the cached golden results, ensuring the app remains fully functional and resilient.
 - **Demo Recording Switch (`DEMO_MODE=cached`)**: When set in `.env.local`, the server routes immediately return deterministic golden results for the sample letters, guaranteeing identical, zero-latency execution for video recordings.
 
@@ -142,8 +143,12 @@ Create a `.env.local` file in the project root (see `.env.example`):
 # Google Gemini API Key (optional for sample cases in DEMO_MODE)
 GEMINI_API_KEY=your_gemini_api_key_here
 
-# Gemini Model (defaults to gemini-2.5-flash)
-GEMINI_MODEL=gemini-2.5-flash
+# Primary Gemini Model (defaults to gemini-3.1-flash-lite)
+# Check https://aistudio.google.com/ for currently available model IDs
+GEMINI_MODEL=gemini-3.1-flash-lite
+
+# Optional Fallback Model (used if primary model hits 503 or 429)
+GEMINI_FALLBACK_MODEL=gemini-2.5-flash
 
 # Set to "cached" for reproducible demo recordings
 DEMO_MODE=cached

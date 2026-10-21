@@ -154,15 +154,82 @@ const GENERATE_JSON_SCHEMA = {
 };
 
 /**
+ * Detects whether an API error is a transient capacity (503) or rate limit (429) error.
+ */
+function isTransientRateOrCapacityError(err: unknown): boolean {
+  if (!err) return false;
+  const str = err instanceof Error ? err.message : String(err);
+  return (
+    str.includes('503') ||
+    str.includes('429') ||
+    str.includes('UNAVAILABLE') ||
+    str.includes('RESOURCE_EXHAUSTED') ||
+    str.includes('high demand') ||
+    str.includes('quota')
+  );
+}
+
+const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
+/**
+ * Executes a Gemini model call with ~1s and ~3s backoff on 503/429, then tries GEMINI_FALLBACK_MODEL once if configured.
+ */
+async function executeWithRetryAndFallback<T>(
+  callFn: (modelName: string) => Promise<T>,
+  operationDescription: string
+): Promise<T> {
+  const primaryModel = process.env.GEMINI_MODEL || 'gemini-3.1-flash-lite';
+  const fallbackModel = process.env.GEMINI_FALLBACK_MODEL;
+
+  let lastError: unknown;
+
+  // Attempt 1 on primary model
+  try {
+    return await callFn(primaryModel);
+  } catch (err) {
+    lastError = err;
+    if (isTransientRateOrCapacityError(err)) {
+      console.warn(`[Gemini] ${operationDescription} hit 503/429 on primary model (${primaryModel}). Retrying with backoff (~1s)...`);
+      await sleep(1000);
+    }
+  }
+
+  // Attempt 2 on primary model (retry)
+  try {
+    return await callFn(primaryModel);
+  } catch (err) {
+    lastError = err;
+    if (isTransientRateOrCapacityError(err)) {
+      console.warn(`[Gemini] ${operationDescription} hit 503/429 again on primary model. Backing off (~3s)...`);
+      await sleep(3000);
+    }
+  }
+
+  // Attempt 3 on fallback model (if configured and distinct)
+  if (fallbackModel && fallbackModel !== primaryModel) {
+    try {
+      console.log(`[Gemini] Trying fallback model (${fallbackModel}) for ${operationDescription}...`);
+      return await callFn(fallbackModel);
+    } catch (fallbackErr) {
+      console.warn(`[Gemini] Fallback model (${fallbackModel}) also failed:`, fallbackErr);
+      lastError = fallbackErr;
+    }
+  }
+
+  throw new Error(
+    `${operationDescription} failed validation: ${lastError instanceof Error ? lastError.message : String(lastError)}`
+  );
+}
+
+/**
  * Extracts key structured facts from a document (image/pdf) using Gemini Flash.
- * Defends against prompt injection and retries once on validation failure.
+ * Defends against prompt injection and retries with backoff and fallback model on transient capacity/rate errors.
  */
 export async function extractDocumentFacts(
   base64Data: string,
   mimeType: string
 ): Promise<ExtractedFactsValidated> {
   const ai = getGenAI();
-  const model = process.env.GEMINI_MODEL || 'gemini-3.1-flash-lite';
 
   const systemInstruction =
     'You are an objective document extraction assistant specialized in health insurance denial letters. ' +
@@ -183,48 +250,35 @@ export async function extractDocumentFacts(
     '10. relativeDays: If deadlineType is relative, the integer number of days (e.g. 180, 60); otherwise null.\n' +
     'All dates MUST be normalized to ISO YYYY-MM-DD or null. Do NOT invent dates or math.';
 
-  let lastError: unknown;
-  for (let attempt = 1; attempt <= 2; attempt++) {
-    try {
-      const response = await ai.models.generateContent({
-        model,
-        contents: [
-          {
-            inlineData: {
-              data: base64Data,
-              mimeType,
-            },
+  return executeWithRetryAndFallback(async (model) => {
+    const response = await ai.models.generateContent({
+      model,
+      contents: [
+        {
+          inlineData: {
+            data: base64Data,
+            mimeType,
           },
-          promptText,
-        ],
-        config: {
-          systemInstruction,
-          responseMimeType: 'application/json',
-          responseSchema: EXTRACT_JSON_SCHEMA,
-          temperature: 0.1,
         },
-      });
+        promptText,
+      ],
+      config: {
+        systemInstruction,
+        responseMimeType: 'application/json',
+        responseSchema: EXTRACT_JSON_SCHEMA,
+        temperature: 0.1,
+      },
+    });
 
-      const rawText = response.text || '{}';
-      const parsed = JSON.parse(rawText);
-      const validated = ExtractedFactsSchema.parse(parsed);
-      return validated;
-    } catch (err) {
-      lastError = err;
-      if (attempt === 2) {
-        throw new Error(
-          `Document extraction failed validation: ${err instanceof Error ? err.message : String(err)}`
-        );
-      }
-    }
-  }
-
-  throw lastError;
+    const rawText = response.text || '{}';
+    const parsed = JSON.parse(rawText);
+    return ExtractedFactsSchema.parse(parsed);
+  }, 'Document extraction');
 }
 
 /**
  * Generates the Plain-English explanation, appeal letter template, and phone script using Gemini Flash.
- * Retries once on validation failure.
+ * Retries with backoff and fallback model on transient capacity/rate errors.
  */
 export async function generateActionKit(
   facts: ExtractedFactsValidated,
@@ -236,7 +290,6 @@ export async function generateActionKit(
   }
 ): Promise<GeneratedKitValidated> {
   const ai = getGenAI();
-  const model = process.env.GEMINI_MODEL || 'gemini-3.1-flash-lite';
 
   const systemInstruction =
     'You are an empathetic, expert patient advocate helping an insured patient appeal an unfair health insurance denial. ' +
@@ -261,33 +314,20 @@ export async function generateActionKit(
     `   - beforeYouHangUp: 3-4 checklist items of vital details to record before ending the call.\n` +
     `5. calendarEvent: { title: 'Appeal Deadline: ...', description: '...' }.`;
 
-  let lastError: unknown;
-  for (let attempt = 1; attempt <= 2; attempt++) {
-    try {
-      const response = await ai.models.generateContent({
-        model,
-        contents: [promptText],
-        config: {
-          systemInstruction,
-          responseMimeType: 'application/json',
-          responseSchema: GENERATE_JSON_SCHEMA,
-          temperature: 0.3,
-        },
-      });
+  return executeWithRetryAndFallback(async (model) => {
+    const response = await ai.models.generateContent({
+      model,
+      contents: [promptText],
+      config: {
+        systemInstruction,
+        responseMimeType: 'application/json',
+        responseSchema: GENERATE_JSON_SCHEMA,
+        temperature: 0.3,
+      },
+    });
 
-      const rawText = response.text || '{}';
-      const parsed = JSON.parse(rawText);
-      const validated = GeneratedKitSchema.parse(parsed);
-      return validated;
-    } catch (err) {
-      lastError = err;
-      if (attempt === 2) {
-        throw new Error(
-          `Action kit generation failed validation: ${err instanceof Error ? err.message : String(err)}`
-        );
-      }
-    }
-  }
-
-  throw lastError;
+    const rawText = response.text || '{}';
+    const parsed = JSON.parse(rawText);
+    return GeneratedKitSchema.parse(parsed);
+  }, 'Action kit generation');
 }
