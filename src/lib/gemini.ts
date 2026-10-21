@@ -230,7 +230,7 @@ export async function generateActionKit(
   facts: ExtractedFactsValidated,
   deadlineInfo: {
     targetDate: string | null;
-    deadlineType: 'explicit' | 'relative' | 'missing';
+    deadlineType?: 'explicit' | 'relative' | 'missing';
     isEstimated: boolean;
     daysRemaining: number | null;
   }
@@ -247,7 +247,7 @@ export async function generateActionKit(
     `Extracted Facts:\n${JSON.stringify(facts, null, 2)}\n\n` +
     `Deadline Information:\n` +
     `- Target Date: ${deadlineInfo.targetDate || 'None found'}\n` +
-    `- Deadline Type: ${deadlineInfo.deadlineType}\n` +
+    `- Deadline Type: ${deadlineInfo.deadlineType || facts.deadlineType || 'missing'}\n` +
     `- Is Estimated: ${deadlineInfo.isEstimated}\n` +
     `- Days Remaining: ${deadlineInfo.daysRemaining !== null ? deadlineInfo.daysRemaining : 'Unknown'}\n\n` +
     `Requirements:\n` +
