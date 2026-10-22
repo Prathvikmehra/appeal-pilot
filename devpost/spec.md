@@ -96,12 +96,12 @@ Traces `prd.md > The Core Journey`.
   9. Click "Start over" to return to the landing screen with clean state.
 
 ### Optional Vercel Deployment
-- **Repository Setup**: Rename local project folder and GitHub repository from `hackthon-timepass` to `appeal-pilot` before creating the public repository.
+- **Repository Setup**: Ensure GitHub repository is named `appeal-pilot` before creating the public repository.
 - Push public GitHub repository.
 - Import repository in Vercel.
 - Configure Environment Variables:
   - `GEMINI_API_KEY`: Google AI Studio API key.
-  - `GEMINI_MODEL`: `gemini-2.5-flash` (or current Flash model from Google AI Studio).
+  - `GEMINI_MODEL`: `gemini-3.1-flash-lite` (or current Flash model from Google AI Studio).
 - Note on Vercel Limits: Server routes set `export const maxDuration = 60` and restrict upload payloads to 3 MB (comfortably below Vercel's 4.5 MB request body limit).
 
 ## Look and Feel
