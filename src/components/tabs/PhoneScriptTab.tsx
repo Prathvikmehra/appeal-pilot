@@ -42,11 +42,11 @@ export const PhoneScriptTab: React.FC<PhoneScriptTabProps> = ({ phoneScript }) =
 
         <button
           onClick={handleCopy}
-          className="whitespace-nowrap flex-shrink-0 inline-flex items-center text-xs font-semibold px-3 py-1.5 rounded-lg border border-slate-300 bg-white hover:bg-slate-50 text-slate-700 shadow-2xs transition-colors self-start sm:self-auto focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-600 focus-visible:ring-offset-2"
+          className="whitespace-nowrap flex-shrink-0 inline-flex items-center text-xs font-semibold px-3 py-1.5 rounded-lg border border-slate-300 bg-white hover:bg-slate-50 text-slate-700 shadow-2xs transition-colors self-start sm:self-auto focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-700 focus-visible:ring-offset-2"
         >
           {copied ? (
             <>
-              <Check className="w-3.5 h-3.5 mr-1 text-teal-600 flex-shrink-0" />
+              <Check className="w-3.5 h-3.5 mr-1 text-teal-700 flex-shrink-0" />
               Copied Script
             </>
           ) : (
@@ -62,7 +62,7 @@ export const PhoneScriptTab: React.FC<PhoneScriptTabProps> = ({ phoneScript }) =
         {/* 1. Before you call */}
         <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-2xs space-y-3 min-w-0">
           <h3 className="text-xs font-bold text-slate-600 uppercase tracking-wider flex items-center whitespace-nowrap">
-            <ListChecks className="w-4 h-4 mr-1.5 text-teal-600 flex-shrink-0" />
+            <ListChecks className="w-4 h-4 mr-1.5 text-teal-700 flex-shrink-0" />
             1. Before You Call — Have These Ready
           </h3>
           <ul className="space-y-2.5">
@@ -102,7 +102,7 @@ export const PhoneScriptTab: React.FC<PhoneScriptTabProps> = ({ phoneScript }) =
                   <span className="min-w-0 flex-1">&ldquo;{item.objection}&rdquo;</span>
                 </p>
                 <div className="pl-6 text-xs sm:text-sm text-teal-900 font-medium flex items-start min-w-0">
-                  <ArrowRight className="w-3.5 h-3.5 mr-1.5 text-teal-600 flex-shrink-0 mt-0.5" />
+                  <ArrowRight className="w-3.5 h-3.5 mr-1.5 text-teal-700 flex-shrink-0 mt-0.5" />
                   <span className="text-pretty break-words min-w-0 flex-1">
                     <strong>Say: </strong>&ldquo;{item.response}&rdquo;
                   </span>
@@ -115,7 +115,7 @@ export const PhoneScriptTab: React.FC<PhoneScriptTabProps> = ({ phoneScript }) =
         {/* 4. Before you hang up */}
         <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-2xs space-y-3 min-w-0">
           <h3 className="text-xs font-bold text-slate-600 uppercase tracking-wider flex items-center whitespace-nowrap">
-            <PhoneCall className="w-4 h-4 mr-1.5 text-teal-600 flex-shrink-0" />
+            <PhoneCall className="w-4 h-4 mr-1.5 text-teal-700 flex-shrink-0" />
             4. Before You Hang Up — Essential Checklist
           </h3>
           <ul className="space-y-2.5">

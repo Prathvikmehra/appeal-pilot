@@ -85,7 +85,7 @@ export const Logo: React.FC<LogoProps> = ({
           <span className={`font-semibold tracking-tight text-slate-900 leading-none ${textClasses}`}>
             Appeal
           </span>
-          <span className={`font-semibold tracking-tight text-teal-600 leading-none ml-1 ${textClasses}`}>
+          <span className={`font-semibold tracking-tight text-teal-700 leading-none ml-1 ${textClasses}`}>
             Pilot
           </span>
 

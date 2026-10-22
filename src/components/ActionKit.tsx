@@ -53,21 +53,46 @@ export const ActionKit: React.FC<ActionKitProps> = ({
 
         {/* Tab Headers */}
         <div className="flex flex-wrap gap-2.5 mt-4 min-w-0" role="tablist" aria-label="Action Kit Tabs">
-          {tabs.map((tab) => {
+          {tabs.map((tab, idx) => {
             const Icon = tab.icon;
             const isActive = activeTab === tab.id;
+
+            const handleTabKeyDown = (e: React.KeyboardEvent<HTMLButtonElement>) => {
+              let targetIdx = idx;
+              if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+                e.preventDefault();
+                targetIdx = (idx + 1) % tabs.length;
+              } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+                e.preventDefault();
+                targetIdx = (idx - 1 + tabs.length) % tabs.length;
+              } else if (e.key === 'Home') {
+                e.preventDefault();
+                targetIdx = 0;
+              } else if (e.key === 'End') {
+                e.preventDefault();
+                targetIdx = tabs.length - 1;
+              }
+
+              if (targetIdx !== idx) {
+                const targetTab = tabs[targetIdx];
+                setActiveTab(targetTab.id);
+                document.getElementById(`tab-${targetTab.id}`)?.focus();
+              }
+            };
 
             return (
               <button
                 key={tab.id}
                 id={`tab-${tab.id}`}
                 role="tab"
+                tabIndex={isActive ? 0 : -1}
                 aria-selected={isActive}
                 aria-controls={`panel-${tab.id}`}
                 onClick={() => setActiveTab(tab.id)}
-                className={`flex items-center space-x-2 px-3.5 sm:px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all whitespace-nowrap flex-shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-600 focus-visible:ring-offset-2 ${
+                onKeyDown={handleTabKeyDown}
+                className={`flex items-center space-x-2 px-3.5 sm:px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all whitespace-nowrap flex-shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-700 focus-visible:ring-offset-2 ${
                   isActive
-                    ? 'bg-teal-600 text-white shadow-xs'
+                    ? 'bg-teal-700 text-white shadow-xs'
                     : 'bg-slate-50 hover:bg-slate-100 text-slate-700 border border-slate-200/80'
                 }`}
               >
@@ -75,7 +100,7 @@ export const ActionKit: React.FC<ActionKitProps> = ({
                 <span className="whitespace-nowrap">{tab.label}</span>
                 <span
                   className={`text-[10px] font-normal px-1.5 py-0.5 rounded-md whitespace-nowrap flex-shrink-0 ${
-                    isActive ? 'bg-teal-700 text-teal-100' : 'bg-slate-200/70 text-slate-600'
+                    isActive ? 'bg-teal-800 text-teal-100' : 'bg-slate-200/70 text-slate-600'
                   }`}
                 >
                   {tab.badge}

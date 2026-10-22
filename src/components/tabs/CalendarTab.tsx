@@ -54,7 +54,7 @@ export const CalendarTab: React.FC<CalendarTabProps> = ({
         {deadline.targetDate && (
           <button
             onClick={handleDownload}
-            className="inline-flex items-center text-xs font-semibold px-4 py-2 rounded-lg bg-teal-600 hover:bg-teal-700 text-white shadow-2xs transition-colors self-start sm:self-auto flex-shrink-0 whitespace-nowrap focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2"
+            className="inline-flex items-center text-xs font-semibold px-4 py-2 rounded-lg bg-teal-700 hover:bg-teal-800 text-white shadow-2xs transition-colors self-start sm:self-auto flex-shrink-0 whitespace-nowrap focus:outline-none focus:ring-2 focus:ring-teal-700 focus:ring-offset-2"
           >
             {downloaded ? (
               <>
@@ -90,12 +90,12 @@ export const CalendarTab: React.FC<CalendarTabProps> = ({
               value={manualInput}
               onChange={(e) => setManualInput(e.target.value)}
               required
-              className="w-full sm:w-auto px-3.5 py-2 bg-white border border-slate-300 rounded-lg text-xs text-slate-900 focus:outline-none focus:ring-2 focus:ring-teal-500 whitespace-nowrap"
+              className="w-full sm:w-auto px-3.5 py-2 bg-white border border-slate-300 rounded-lg text-xs text-slate-900 focus:outline-none focus:ring-2 focus:ring-teal-700 whitespace-nowrap"
             />
             <button
               type="submit"
               disabled={!manualInput}
-              className="w-full sm:w-auto px-4 py-2 bg-teal-600 hover:bg-teal-700 text-white rounded-lg text-xs font-semibold shadow-xs disabled:opacity-50 whitespace-nowrap focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2"
+              className="w-full sm:w-auto px-4 py-2 bg-teal-700 hover:bg-teal-800 text-white rounded-lg text-xs font-semibold shadow-xs disabled:opacity-50 whitespace-nowrap focus:outline-none focus:ring-2 focus:ring-teal-700 focus:ring-offset-2"
             >
               Set Date
             </button>

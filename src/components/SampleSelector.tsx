@@ -13,7 +13,7 @@ export const SampleSelector: React.FC<SampleSelectorProps> = ({ onSelectSample, 
     <div className="w-full">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-4 gap-1 min-w-0">
         <h2 className="text-sm font-semibold tracking-wider text-slate-500 uppercase flex items-center whitespace-nowrap">
-          <FileText className="w-4 h-4 mr-1.5 text-teal-600 flex-shrink-0" />
+          <FileText className="w-4 h-4 mr-1.5 text-teal-700 flex-shrink-0" />
           Try a sample case (One-click)
         </h2>
         <span className="text-xs text-slate-400 whitespace-nowrap">Realistic synthetic letters</span>
@@ -63,7 +63,7 @@ export const SampleSelector: React.FC<SampleSelectorProps> = ({ onSelectSample, 
                 </div>
               </div>
 
-              <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs font-semibold text-teal-600 group-hover:text-teal-700">
+              <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs font-semibold text-teal-700 group-hover:text-teal-800">
                 <span className="whitespace-nowrap">Load & Analyze</span>
                 <ArrowRight className="w-3.5 h-3.5 transform group-hover:translate-x-1 transition-transform flex-shrink-0" />
               </div>

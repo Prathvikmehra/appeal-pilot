@@ -123,7 +123,7 @@ export const ExplanationCard: React.FC<ExplanationCardProps> = ({
 
         <button
           onClick={() => setIsDatePickerOpen(true)}
-          className="whitespace-nowrap flex-shrink-0 inline-flex items-center text-xs font-semibold px-3 py-1.5 rounded-lg border border-slate-300/80 bg-white hover:bg-slate-50 text-slate-700 shadow-2xs transition-colors self-start sm:self-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-600 focus-visible:ring-offset-2"
+          className="whitespace-nowrap flex-shrink-0 inline-flex items-center text-xs font-semibold px-3 py-1.5 rounded-lg border border-slate-300/80 bg-white hover:bg-slate-50 text-slate-700 shadow-2xs transition-colors self-start sm:self-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-700 focus-visible:ring-offset-2"
         >
           <Calendar className="w-3.5 h-3.5 mr-1.5 text-slate-500 flex-shrink-0" />
           Change date
@@ -141,7 +141,7 @@ export const ExplanationCard: React.FC<ExplanationCardProps> = ({
       {/* 2. Plain-English Summary */}
       <div className="space-y-1.5 border-b border-slate-100 pb-5 min-w-0">
         <h2 className="text-xs font-semibold text-slate-500 uppercase tracking-wider flex items-center whitespace-nowrap">
-          <Info className="w-3.5 h-3.5 mr-1 text-teal-600 flex-shrink-0" />
+          <Info className="w-3.5 h-3.5 mr-1 text-teal-700 flex-shrink-0" />
           Plain-English Translation
         </h2>
         <p className="text-base sm:text-lg font-medium text-slate-900 leading-relaxed text-pretty max-w-[70ch]">
@@ -223,7 +223,7 @@ export const ExplanationCard: React.FC<ExplanationCardProps> = ({
       {/* 4. Why They Denied It & Jargon Tags */}
       <div className="space-y-3 border-b border-slate-100 pb-5 min-w-0">
         <h3 className="text-xs font-semibold text-slate-500 uppercase tracking-wider flex items-center whitespace-nowrap">
-          <HelpCircle className="w-3.5 h-3.5 mr-1 text-teal-600 flex-shrink-0" />
+          <HelpCircle className="w-3.5 h-3.5 mr-1 text-teal-700 flex-shrink-0" />
           Why They Denied It & Translated Jargon
         </h3>
 

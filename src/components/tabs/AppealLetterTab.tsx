@@ -108,7 +108,7 @@ export const AppealLetterTab: React.FC<AppealLetterTabProps> = ({
 
           <button
             onClick={handleDownload}
-            className="whitespace-nowrap flex-shrink-0 inline-flex items-center text-xs font-semibold px-3 py-1.5 rounded-lg bg-teal-600 hover:bg-teal-700 text-white shadow-2xs transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-600 focus-visible:ring-offset-2"
+            className="whitespace-nowrap flex-shrink-0 inline-flex items-center text-xs font-semibold px-3 py-1.5 rounded-lg bg-teal-700 hover:bg-teal-800 text-white shadow-2xs transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-700 focus-visible:ring-offset-2"
           >
             <Download className="w-3.5 h-3.5 mr-1 flex-shrink-0" />
             Download .txt
@@ -118,7 +118,7 @@ export const AppealLetterTab: React.FC<AppealLetterTabProps> = ({
 
       <div className="bg-white border border-slate-200 rounded-xl p-5 sm:p-7 font-mono text-xs sm:text-[13px] text-slate-800 leading-relaxed shadow-2xs overflow-x-auto whitespace-pre-wrap break-words max-h-[600px] overflow-y-auto min-w-0">
         <div className="flex items-center space-x-2 pb-4 mb-4 border-b border-slate-100 text-slate-400 font-sans text-xs whitespace-nowrap">
-          <FileText className="w-4 h-4 text-teal-600 flex-shrink-0" />
+          <FileText className="w-4 h-4 text-teal-700 flex-shrink-0" />
           <span>Formal Appeal Document Preview</span>
         </div>
         {renderStyledLetter()}
