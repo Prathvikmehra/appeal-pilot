@@ -4,6 +4,7 @@ import { generateActionKit } from '@/lib/gemini';
 import { SAMPLE_CASES } from '@/lib/sample-data';
 import { ExtractedFactsSchema } from '@/lib/schemas';
 
+export const runtime = 'nodejs';
 export const maxDuration = 60;
 
 export async function POST(req: NextRequest) {

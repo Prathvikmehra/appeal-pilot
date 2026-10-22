@@ -7,6 +7,7 @@ import { extractDocumentFacts } from '@/lib/gemini';
 import { SAMPLE_CASES } from '@/lib/sample-data';
 import { ExtractedFactsValidated } from '@/lib/schemas';
 
+export const runtime = 'nodejs';
 export const maxDuration = 60;
 
 const MAX_FILE_SIZE = 3 * 1024 * 1024; // 3 MB
