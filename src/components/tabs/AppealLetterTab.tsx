@@ -39,8 +39,10 @@ export const AppealLetterTab: React.FC<AppealLetterTabProps> = ({
     const blob = new Blob([interpolatedText], { type: 'text/plain;charset=utf-8' });
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
-    link.href = url;
-    link.download = `appeal-letter-${facts.claimNumber || 'claim'}.txt`;
+    const safeClaim = (facts.claimNumber || 'claim')
+      .replace(/[^a-zA-Z0-9_-]/g, '_')
+      .slice(0, 50) || 'claim';
+    link.download = `appeal-letter-${safeClaim}.txt`;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);

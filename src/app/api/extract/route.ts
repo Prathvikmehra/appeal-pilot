@@ -101,7 +101,7 @@ export async function POST(req: NextRequest) {
     }
 
     // 5. Invoke Gemini Multimodal Extraction
-    console.log(`[API /extract] Mode: live (Custom upload: ${file.name}, ${file.type}) - Calling Gemini Flash API`);
+    console.log(`[API /extract] Mode: live (Custom upload: mime=${file.type}, size=${file.size}B) - Calling Gemini Flash API`);
     const base64Data = buffer.toString('base64');
     const facts: ExtractedFactsValidated = await extractDocumentFacts(base64Data, file.type);
     console.log(`[API /extract] Mode: live (Custom upload) - Extraction SUCCESS for ${facts.insurer}`);
@@ -111,10 +111,7 @@ export async function POST(req: NextRequest) {
     console.error('[API /extract] Unhandled extraction error:', error);
     return NextResponse.json(
       {
-        error:
-          error instanceof Error
-            ? error.message
-            : 'We were unable to analyze this document. Please ensure it is a clear, legible denial letter and try again.',
+        error: 'We were unable to analyze this document. Please ensure it is a clear, legible denial letter and try again.',
       },
       { status: 500 }
     );

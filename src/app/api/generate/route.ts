@@ -68,10 +68,7 @@ export async function POST(req: NextRequest) {
     console.error('[API /generate] Unhandled generation error:', error);
     return NextResponse.json(
       {
-        error:
-          error instanceof Error
-            ? error.message
-            : 'We were unable to generate your action kit. Please try again.',
+        error: 'We were unable to generate your action kit. Please try again.',
       },
       { status: 500 }
     );
