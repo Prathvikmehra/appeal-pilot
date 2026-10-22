@@ -1,11 +1,8 @@
 import { ImageResponse } from 'next/og';
 
 export const runtime = 'edge';
-export const size = { width: 1200, height: 630 };
-export const contentType = 'image/png';
-export const alt = 'Appeal Pilot — Turn Insurance Denials Into Action';
 
-export default function OpengraphImage() {
+export async function GET() {
   return new ImageResponse(
     (
       <div
@@ -176,6 +173,9 @@ export default function OpengraphImage() {
         </div>
       </div>
     ),
-    { ...size }
+    {
+      width: 1200,
+      height: 630,
+    }
   );
 }
