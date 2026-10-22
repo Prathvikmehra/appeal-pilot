@@ -6,6 +6,7 @@ import {
   getDaysDifference,
   calculateDeadline,
   createManualDeadline,
+  getDeadlineBannerState,
 } from '@/lib/date-calculator';
 
 describe('Date Calculator — Deterministic Arithmetic', () => {
@@ -160,6 +161,56 @@ describe('Date Calculator — Deterministic Arithmetic', () => {
       expect(result.isUrgent).toBe(true);
       expect(result.isEstimated).toBe(false);
       expect(result.alarmDaysPrior).toEqual([7, 1]);
+    });
+  });
+
+  describe('getDeadlineBannerState — Past & Urgent Deadlines', () => {
+    it('applies urgent style, clear warning headline, and next steps when deadline has passed', () => {
+      const pastDeadline = calculateDeadline({
+        deadlineType: 'explicit',
+        explicitDate: '2026-10-01',
+        relativeDays: null,
+        letterDate: '2026-09-15',
+        todayStr: '2026-10-12', // 11 days past
+      });
+
+      const banner = getDeadlineBannerState(pastDeadline);
+      expect(banner.isPast).toBe(true);
+      expect(banner.useUrgentStyle).toBe(true);
+      expect(banner.headline).toBe('Appeal deadline may have passed');
+      expect(banner.badgeText).toBe('Deadline May Have Passed');
+      expect(banner.guidanceText).toContain('Call your insurer to ask about late appeals or external review');
+    });
+
+    it('retains urgent style for active deadlines within 14 days', () => {
+      const urgentDeadline = calculateDeadline({
+        deadlineType: 'explicit',
+        explicitDate: '2026-10-20',
+        relativeDays: null,
+        letterDate: '2026-09-15',
+        todayStr: '2026-10-12', // 8 days remaining
+      });
+
+      const banner = getDeadlineBannerState(urgentDeadline);
+      expect(banner.isPast).toBe(false);
+      expect(banner.useUrgentStyle).toBe(true);
+      expect(banner.headline).toContain('Appeal by Oct 20, 2026');
+      expect(banner.badgeText).toBe('8 days left');
+    });
+
+    it('uses standard style when deadline is safely in the future (> 14 days)', () => {
+      const futureDeadline = calculateDeadline({
+        deadlineType: 'explicit',
+        explicitDate: '2026-11-15',
+        relativeDays: null,
+        letterDate: '2026-09-15',
+        todayStr: '2026-10-12', // 34 days remaining
+      });
+
+      const banner = getDeadlineBannerState(futureDeadline);
+      expect(banner.isPast).toBe(false);
+      expect(banner.useUrgentStyle).toBe(false);
+      expect(banner.badgeText).toBe('34 days left');
     });
   });
 });

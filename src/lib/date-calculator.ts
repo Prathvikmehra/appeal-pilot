@@ -187,3 +187,54 @@ export function createManualDeadline(newDateStr: string, todayStr?: string): Com
     alarmDaysPrior: [7, 1],
   };
 }
+
+export interface DeadlineBannerState {
+  isPast: boolean;
+  useUrgentStyle: boolean;
+  headline: string;
+  badgeText: string | null;
+  guidanceText: string;
+}
+
+/**
+ * Computes banner display state for a deadline, ensuring passed deadlines are clearly visible in urgent style.
+ */
+export function getDeadlineBannerState(deadline: ComputedDeadline): DeadlineBannerState {
+  const isPast = deadline.daysRemaining !== null && deadline.daysRemaining < 0;
+  const useUrgentStyle = deadline.isUrgent || isPast;
+
+  let headline = 'Deadline Not Found in Letter';
+  if (isPast) {
+    headline = 'Appeal deadline may have passed';
+  } else if (deadline.targetDate) {
+    headline = `Appeal by ${formatDisplayDate(deadline.targetDate)}`;
+  }
+
+  let badgeText: string | null = null;
+  if (deadline.daysRemaining !== null) {
+    if (isPast) {
+      badgeText = 'Deadline May Have Passed';
+    } else if (deadline.daysRemaining === 0) {
+      badgeText = 'Due Today';
+    } else {
+      badgeText = `${deadline.daysRemaining} days left`;
+    }
+  }
+
+  let guidanceText = 'Many insurers allow roughly 180 days, but verify your policy or call your insurer.';
+  if (isPast) {
+    guidanceText = 'This deadline may have passed. Call your insurer to ask about late appeals or external review. Your appeal letter and kit are still generated below.';
+  } else if (deadline.calculationMath) {
+    guidanceText = `Based on: ${deadline.calculationMath}. Confirm with your insurer.`;
+  } else if (deadline.targetDate) {
+    guidanceText = 'Formal statutory appeal deadline stated in notice.';
+  }
+
+  return {
+    isPast,
+    useUrgentStyle,
+    headline,
+    badgeText,
+    guidanceText,
+  };
+}

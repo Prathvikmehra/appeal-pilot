@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { ExtractedFacts, ComputedDeadline, GeneratedKit } from '@/types/appeal';
-import { formatDisplayDate } from '@/lib/date-calculator';
+import { formatDisplayDate, getDeadlineBannerState } from '@/lib/date-calculator';
 import { DatePickerModal } from './modals/DatePickerModal';
 import {
   Clock,
@@ -31,13 +31,14 @@ export const ExplanationCard: React.FC<ExplanationCardProps> = ({
   onUpdateDeadline,
 }) => {
   const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
+  const bannerState = getDeadlineBannerState(deadline);
 
   return (
     <div className="w-full bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-xs space-y-6 p-5 sm:p-7">
       {/* 1. Deadline Banner */}
       <div
         className={`rounded-xl p-4 sm:p-5 border flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 transition-colors min-w-0 ${
-          deadline.isUrgent
+          bannerState.useUrgentStyle
             ? 'bg-amber-50/80 border-amber-300/80 text-amber-950'
             : deadline.targetDate
             ? 'bg-teal-50/80 border-teal-200/80 text-teal-950'
@@ -47,14 +48,14 @@ export const ExplanationCard: React.FC<ExplanationCardProps> = ({
         <div className="flex items-start space-x-3.5 min-w-0 flex-1">
           <div
             className={`h-10 w-10 rounded-xl flex items-center justify-center flex-shrink-0 mt-0.5 ${
-              deadline.isUrgent
+              bannerState.useUrgentStyle
                 ? 'bg-amber-200 text-amber-800'
                 : deadline.targetDate
                 ? 'bg-teal-200 text-teal-800'
                 : 'bg-slate-200 text-slate-600'
             }`}
           >
-            {deadline.isUrgent ? (
+            {bannerState.useUrgentStyle ? (
               <AlertTriangle className="w-5 h-5 flex-shrink-0" />
             ) : (
               <Clock className="w-5 h-5 flex-shrink-0" />
@@ -64,7 +65,16 @@ export const ExplanationCard: React.FC<ExplanationCardProps> = ({
           <div className="min-w-0 flex-1 space-y-1">
             <div className="flex flex-wrap items-center gap-2 min-w-0">
               <span className="font-bold text-sm sm:text-base leading-snug break-words">
-                {deadline.targetDate ? (
+                {bannerState.isPast ? (
+                  <>
+                    <span>Appeal deadline may have passed </span>
+                    {deadline.targetDate && (
+                      <span className="whitespace-nowrap font-normal text-xs sm:text-sm text-amber-900">
+                        ({formatDisplayDate(deadline.targetDate)})
+                      </span>
+                    )}
+                  </>
+                ) : deadline.targetDate ? (
                   <>
                     <span>Appeal by </span>
                     <span className="whitespace-nowrap">{formatDisplayDate(deadline.targetDate)}</span>
@@ -80,25 +90,25 @@ export const ExplanationCard: React.FC<ExplanationCardProps> = ({
                 </span>
               )}
 
-              {deadline.daysRemaining !== null && (
+              {bannerState.badgeText && (
                 <span
                   className={`whitespace-nowrap flex-shrink-0 text-xs font-semibold px-2.5 py-0.5 rounded-full ${
-                    deadline.isUrgent
-                      ? 'bg-amber-500 text-white'
-                      : 'bg-teal-600 text-white'
+                    bannerState.useUrgentStyle
+                      ? 'bg-amber-400 text-amber-950'
+                      : 'bg-teal-700 text-white'
                   }`}
                 >
-                  {deadline.daysRemaining < 0
-                    ? 'Expired'
-                    : deadline.daysRemaining === 0
-                    ? 'Due Today'
-                    : `${deadline.daysRemaining} days left`}
+                  {bannerState.badgeText}
                 </span>
               )}
             </div>
 
-            <p className="text-xs text-slate-600 leading-normal text-pretty break-words">
-              {deadline.calculationMath ? (
+            <p className="text-xs text-slate-700 leading-normal text-pretty break-words">
+              {bannerState.isPast ? (
+                <span>
+                  This deadline may have passed. <strong>Next steps:</strong> Call your insurer to ask about late appeals or external review. Your appeal letter and kit are still generated below.
+                </span>
+              ) : deadline.calculationMath ? (
                 <span>
                   Based on: {deadline.calculationMath}. <em>Confirm with your insurer.</em>
                 </span>
